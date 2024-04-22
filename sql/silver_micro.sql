@@ -24,7 +24,7 @@ create table customer
     password   varchar(255) not null,
     avatar     varchar(255) null,
     created_at datetime     not null,
-    update_at  int          null
+    update_at  datetime          null
 );
 
 create table customer_favorite
