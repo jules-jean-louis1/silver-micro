@@ -33,11 +33,11 @@ export const Customer = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    createdAt: {
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    updatedAt: {
+    updated_at: {
       type: DataTypes.DATE,
       allowNull: true,
     },
