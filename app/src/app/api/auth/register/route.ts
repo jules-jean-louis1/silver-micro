@@ -64,15 +64,12 @@ export async function POST(request: any) {
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(body.password, salt);
-    const role = ["USER_CLIENT"];
-    const roleString = JSON.stringify(role);
 
     const customer = await Customer.create({
       firstname: body.firstname,
       lastname: body.lastname,
       email: body.email,
       password: hash,
-      role: roleString,
       created_at: new Date(),
     });
 
