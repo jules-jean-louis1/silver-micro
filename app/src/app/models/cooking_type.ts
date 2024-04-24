@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../api/config";
+import { CookingTypeRestaurant } from "./cooking_type_restaurant";
 
 export const CookingType = sequelize.define(
   "cooking_type",
@@ -19,3 +20,8 @@ export const CookingType = sequelize.define(
     freezeTableName: true,
   }
 );
+
+CookingType.belongsToMany(CookingTypeRestaurant, {
+  through: CookingTypeRestaurant,
+  foreignKey: "cooking_type_id",
+});

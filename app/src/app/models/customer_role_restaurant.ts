@@ -1,18 +1,18 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../api/config";
+import { Customer } from "./customer";
 import { Restaurant } from "./restaurant";
 
-export const RestaurantPhoto = sequelize.define(
-  "restaurant_photo",
+export const CustomerRole = sequelize.define(
+  "customer_role_restaurant",
   {
-    id: {
+    customer_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    filename: {
-      type: DataTypes.STRING,
       allowNull: false,
+      references: {
+        model: Customer,
+        key: "id",
+      },
     },
     restaurant_id: {
       type: DataTypes.INTEGER,
@@ -22,17 +22,12 @@ export const RestaurantPhoto = sequelize.define(
         key: "id",
       },
     },
-    created_at: {
-      type: DataTypes.DATE,
+    role: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
   {
     timestamps: false,
-    freezeTableName: true,
   }
 );
-
-RestaurantPhoto.belongsTo(Restaurant, {
-  foreignKey: "restaurant_id",
-});

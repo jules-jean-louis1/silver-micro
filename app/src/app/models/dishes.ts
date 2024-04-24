@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../api/config";
+import { DishesRestaurant } from "./dishes_restaurant";
 
 export const Dishes = sequelize.define(
   "dishes",
@@ -19,3 +20,8 @@ export const Dishes = sequelize.define(
     freezeTableName: true,
   }
 );
+
+Dishes.belongsToMany(DishesRestaurant, {
+  through: DishesRestaurant,
+  foreignKey: "dishes_id",
+});

@@ -32,3 +32,6 @@ export const CustomerFavorite = sequelize.define(
     freezeTableName: true,
   }
 );
+
+CustomerFavorite.belongsTo(Customer, { as: 'customer', foreignKey: 'customer_id' });
+Customer.hasMany(CustomerFavorite, { as: 'favorites', foreignKey: 'customer_id' });

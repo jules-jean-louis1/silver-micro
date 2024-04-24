@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../api/config";
+import { FrameAmbienceRestaurant } from "./frame_ambience_restaurant";
 
 export const FrameAmbience = sequelize.define(
   "frame_ambience",
@@ -19,3 +20,8 @@ export const FrameAmbience = sequelize.define(
     freezeTableName: true,
   }
 );
+
+FrameAmbience.belongsToMany(FrameAmbienceRestaurant, {
+  through: FrameAmbienceRestaurant,
+  foreignKey: "frame_ambience_id",
+});

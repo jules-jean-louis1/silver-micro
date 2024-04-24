@@ -9,7 +9,7 @@ sequelize.sync();
 export async function POST(request: any) {
   try {
     const body = await request.json();
-    console.log(body);
+
     if (!body) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
@@ -82,7 +82,7 @@ export async function POST(request: any) {
         { status: 500 }
       );
     } else {
-      return NextResponse.json({ message: "Customer created successfully" });
+      return NextResponse.json({ message: "Customer created successfully" }, { status: 201 });
     }
 
   } catch (error) {
