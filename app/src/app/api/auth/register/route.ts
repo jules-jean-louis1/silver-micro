@@ -10,7 +10,6 @@ sequelize.sync();
 export async function POST(request: any) {
   try {
     const body = await request.json();
-    console.log("body", body);
     if (!body) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }

@@ -1,36 +1,40 @@
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Op } from "sequelize";
 import bcrypt from "bcryptjs";
-import sequelize from "../../config";
+import { connectToDatabase } from "../../config";
 import { Customer } from "@/app/models/customer";
-
-sequelize.sync();
 
 export const authOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const { username, password } = credentials as { username: string, password: string };
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
 
-        if (username === "" || password === "") {
-            throw new Error("Champs manquants");
+        await connectToDatabase();
+
+        if (email === "" || password === "") {
+          throw new Error("Champs manquants");
         }
-
         const customer = await Customer.findOne({
-            where: {
-                [Op.or]: [{ username: username }, { email: username }],
-            },
+          where: {
+            email: email,
+          },
         });
         if (!customer) {
-            throw new Error("Utilisateur introuvable");
+          throw new Error("Utilisateur introuvable");
         }
 
         const passwordMatch = bcrypt.compareSync(password, customer.password);
@@ -48,13 +52,13 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, customer }: { token: any, customer: any }) {
+    async jwt({ token, customer }: { token: any; customer: any }) {
       if (customer) {
         token.customer = customer;
       }
       return token;
     },
-    async session({ session, token }: { session: any, token: any }) {
+    async session({ session, token }: { session: any; token: any }) {
       session.user = {
         id: token.customer.id,
         username: token.customer.username,
@@ -64,7 +68,7 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: "/signin",
+    signIn: "/login",
   },
   session: {
     storage: "jwt",
