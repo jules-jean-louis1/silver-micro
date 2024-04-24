@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../api/config";
-import { Restaurant } from "./restaurant";
-import { CustomerRole } from "./customer_role_restaurant";
 
 export const Customer = sequelize.define(
   "customer",
@@ -46,8 +44,4 @@ export const Customer = sequelize.define(
   }
 );
 
-Customer.belongsToMany(Restaurant, {
-  through: CustomerRole,
-  foreignKey: "customer_id",
-});
 

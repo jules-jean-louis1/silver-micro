@@ -40,7 +40,3 @@ export const RestaurantMenu = sequelize.define(
     freezeTableName: true,
   }
 );
-
-RestaurantMenu.belongsTo(Restaurant, {
-  foreignKey: "restaurant_id",
-});

@@ -3,13 +3,14 @@ import { Customer } from "@/app/models/customer";
 import sequelize from "@/app/api/config";
 import bcrypt from "bcryptjs";
 import { validateEmail, validatePassword } from "@/app/utils/validateForm";
+import "@/app/models/relationships";
 
 sequelize.sync();
 
 export async function POST(request: any) {
   try {
     const body = await request.json();
-
+    console.log("body", body);
     if (!body) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }

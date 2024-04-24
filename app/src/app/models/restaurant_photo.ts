@@ -32,7 +32,3 @@ export const RestaurantPhoto = sequelize.define(
     freezeTableName: true,
   }
 );
-
-RestaurantPhoto.belongsTo(Restaurant, {
-  foreignKey: "restaurant_id",
-});
