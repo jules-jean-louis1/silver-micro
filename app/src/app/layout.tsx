@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import ClientSessionProvider from "./context/ClientSessionProvider";
 import { Header } from "./components/shared/Header";
+import { Inter as FontSans } from "next/font/google"
 
-const inter = Inter({ subsets: ["latin"] });
+import { cn } from "@/lib/utils"
+ 
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 export const metadata: Metadata = {
   title: "Miam - Restaurant",
@@ -20,7 +25,12 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="fr">
-      <body>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
         <ClientSessionProvider session={session}>
           <Header />
           {children}
