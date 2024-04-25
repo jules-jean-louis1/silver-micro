@@ -4,6 +4,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectToDatabase } from "../../config";
 import { Customer } from "@/app/models/customer";
+import { CustomerRole } from "@/app/models/customer_role_restaurant";
+import "@/app/models/relationships";
+
 
 export const authOptions = {
   providers: [
@@ -17,53 +20,73 @@ export const authOptions = {
         email: { label: "email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+      async authorize(credentials): Promise<any> {
+        try {
+          const { email, password } = credentials as {
+            email: string;
+            password: string;
+          };
+      
+          await connectToDatabase();
+      
+          if (email === "" || password === "") {
+            throw new Error("Champs manquants");
+          }
 
-        await connectToDatabase();
+          const customer = await Customer.findOne({ where: { email } });
 
-        if (email === "" || password === "") {
-          throw new Error("Champs manquants");
-        }
-        const customer = await Customer.findOne({
-          where: {
-            email: email,
-          },
-        });
-        if (!customer) {
-          throw new Error("Utilisateur introuvable");
-        }
+          if (!customer) {
+            throw new Error("Utilisateur introuvable");
+          }
+      
+          const passwordMatch = bcrypt.compareSync(password, customer.password);
+      
+          if (!passwordMatch) {
+            throw new Error("Mot de passe incorrect");
+          }
 
-        const passwordMatch = bcrypt.compareSync(password, customer.password);
+          const roles = await CustomerRole.findAll({
+            where: { customer_id: customer.id },
+            attributes: ["role", "restaurant_id"],
+          });
 
-        if (!passwordMatch) {
-          throw new Error("Mot de passe incorrect");
-        }
-
-        if (customer) {
-          return customer;
-        } else {
+          console.log(roles);
+          return { customer, roles };
+        } catch (error) {
+          console.error(error);
           return null;
         }
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, customer }: { token: any; customer: any }) {
-      if (customer) {
-        token.customer = customer;
+    async jwt(params: any) {
+      const { token, user } = params;
+      if (user) {
+        const { customer, roles } = user;
+        token.customer = {
+          id: customer.id,
+          firstname: customer.firstname,
+          lastname: customer.lastname,
+          email: customer.email,
+        };
+        token.roles = roles.map((role: any) => ({
+          role: role.role,
+          restaurant_id: role.restaurant_id,
+        }));
       }
       return token;
     },
     async session({ session, token }: { session: any; token: any }) {
-      session.user = {
-        id: token.customer.id,
-        username: token.customer.username,
-        email: token.customer.email,
-      };
+      if (token.customer) {
+        session.user = {
+          id: token.customer.id,
+          firstname: token.customer.firstname,
+          lastname: token.customer.lastname,
+          email: token.customer.email,
+        };
+        session.roles = token.roles;
+      }
       return session;
     },
   },
