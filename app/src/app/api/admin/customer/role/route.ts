@@ -52,3 +52,27 @@ export async function PUT(request: any) {
     }
 }
 
+export async function DELETE(request: any) {
+    try {
+        const data = await request.json();
+        if (!data) {
+            return NextResponse.json({ error: "No data provided" }, { status: 400 });
+        }
+        if (!data.customer_id || !data.restaurant_id) {
+            return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+        }
+        const role = await CustomerRole.findOne({
+            where: {
+                customer_id: data.customer_id,
+                restaurant_id: data.restaurant_id,
+            },
+        });
+        if (!role) {
+            return NextResponse.json({ error: "Role not found" }, { status: 404 });
+        }
+        await role.destroy();
+        return NextResponse.json({ message: "Role deleted" });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+}
