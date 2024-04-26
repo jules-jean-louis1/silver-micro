@@ -8,7 +8,6 @@ import Link from "next/link";
 
 export const Header = () => {
   const session = useSession();
-  console.log(session);
 
   return (
     <header className="w-screen h-14 p-3">
