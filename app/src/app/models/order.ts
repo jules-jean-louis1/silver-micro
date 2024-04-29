@@ -25,7 +25,7 @@ export const Order = sequelize.define(
     },
     end_at: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     restaurant_id: {
       type: DataTypes.INTEGER,
