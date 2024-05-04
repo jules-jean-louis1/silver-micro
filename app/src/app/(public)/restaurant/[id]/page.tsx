@@ -1,7 +1,6 @@
 "use client";
 
-import { BookingHours } from "@/app/components/restaurant/booking/BookingHours";
-import { Calendar } from "@/app/components/restaurant/booking/Calendar";
+import { BookingForm } from "@/app/components/restaurant/booking/BookingForm";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -32,10 +31,9 @@ function RestaurantPage() {
       <section className="w-screen h-[calc(100vh-56px)] flex space-x-2">
         <article></article>
         <article>
-          <BookingHours />
         </article>
         <article>
-          <Calendar daysClosed={daysClosed} setSelectedDay={setSelectedDay} />
+          <BookingForm />
         </article>
       </section>
     </>
