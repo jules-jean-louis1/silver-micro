@@ -8,21 +8,12 @@ function RestaurantPage() {
   const { id } = useParams();
 
   const [restaurant, setRestaurant] = useState(null);
-  let [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
-  const [daysClosed, setDaysClosed] = useState({
-    monday: false,
-    tuesday: false,
-  });
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`/api/restaurant/${id}`);
       const data = await response.json();
       setRestaurant(data);
-      setDaysClosed({
-        monday: data.close_monday,
-        tuesday: data.close_tuesday,
-      });
     })();
   }, [id]);
 
@@ -33,7 +24,7 @@ function RestaurantPage() {
         <article>
         </article>
         <article>
-          <BookingForm />
+          <BookingForm restaurant={restaurant} />
         </article>
       </section>
     </>

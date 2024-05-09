@@ -1,21 +1,33 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { FC } from "react";
 
-export const BookingSeat = () => {
-  const [seat, setSeat] = useState<number | null>(null);
-  const handleSeatClick = () => {
-    setSeat(seat === null ? 1 : seat + 1);
-    console.log(`Seat ${seat} is clicked`);
+interface BookingSeatProps {
+  setSelectedSeat: (seat: number | null) => void;
+  restaurantSeats: number;
+}
+
+export const BookingSeat: FC<BookingSeatProps> = (props) => {
+  const { setSelectedSeat, restaurantSeats } = props;
+
+  const displaySeats = () => {
+    const seats = [];
+    for (let i = 0; i < restaurantSeats; i++) {
+      seats.push(i + 1);
+    }
+    return seats;
   };
-
-  const seats = [];
-  for (let i = 0; i < 12; i++) {
-    seats.push(
-      <Button key={i} onClick={handleSeatClick}>
-        {i + 1}
-      </Button>
-    );
-  }
-
-  return <div>{seats}</div>;
+  return (
+    <div className="grid grid-cols-4 gap-4">
+      {displaySeats().map((seat, index) => (
+        <Button
+          key={index}
+          onClick={(e) =>
+            setSelectedSeat(Number((e.target as HTMLButtonElement).textContent))
+          }
+        >
+          {seat}
+        </Button>
+      ))}
+    </div>
+  );
 };

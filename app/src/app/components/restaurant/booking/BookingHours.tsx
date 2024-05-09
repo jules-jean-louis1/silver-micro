@@ -1,22 +1,34 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
-export const BookingHours = () => {
-    // Définir les heures que vous voulez afficher
-    const [startHours, setStartHours] = useState(new Date().setHours(9, 0, 0));
-    const [endHours, setEndHours] = useState(new Date().setHours(20, 0, 0));
-
-    let hours = [];
-    for(let i = startHours; i <= endHours; i = new Date(i).setHours(new Date(i).getHours() + 1)) {
-        hours.push(new Date(i).getHours() + ":00");
-    }
-  
-    return (
-      <div className="grid grid-cols-4 gap-4">
-        {hours.map((hour, index) => (
-          <div key={index} className="border p-2">
-            {hour}
-          </div>
-        ))}
-      </div>
-    );
+interface BookingHoursProps {
+  setSelectedHours: (hours: Date | null) => void;
+  opperatingHours: {
+    start: string;
+    end: string;
+  };
 }
+export const BookingHours: React.FC<BookingHoursProps> = (props) => {
+  const { setSelectedHours, opperatingHours } = props;
+
+  const displayHours = () => {
+    let hours = [];
+    for (
+      let i = parseInt(opperatingHours.start);
+      i <= parseInt(opperatingHours.end);
+      i++
+    ) {
+      hours.push(i + ":00");
+    }
+    return hours;
+  };
+
+  return (
+    <div className="grid grid-cols-4 gap-4">
+      {displayHours().map((hour, index) => (
+        <Button key={index} onClick={() => setSelectedHours(new Date("1970-01-01T" + hour))}>
+          {hour}
+        </Button>
+      ))}
+    </div>
+  );
+};
