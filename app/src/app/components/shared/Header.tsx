@@ -7,7 +7,7 @@ import Link from "next/link";
 
 
 export const Header = () => {
-  const session = useSession();
+  const {data} = useSession();
 
   return (
     <header className="w-screen h-14 p-3">
@@ -16,10 +16,10 @@ export const Header = () => {
           <Link href="/">Home</Link>
         </div>
         <div>
-          {session ? (
+          {data ? (
             <Button className="flex justify-center">
               <UserRound />
-              <Link href="/profile">Profil</Link>
+              <Link href="/profile">{data.user.firstname}</Link>
             </Button>
           ) : (
             <Button className="flex justify-center">

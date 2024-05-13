@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function RestaurantPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   const [restaurant, setRestaurant] = useState(null);
 
@@ -24,7 +24,7 @@ function RestaurantPage() {
         <article>
         </article>
         <article>
-          <BookingForm restaurant={restaurant} />
+          <BookingForm restaurant={restaurant}/>
         </article>
       </section>
     </>

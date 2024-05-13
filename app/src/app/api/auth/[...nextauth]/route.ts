@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -8,7 +8,7 @@ import { CustomerRole } from "@/app/models/customer_role_restaurant";
 import "@/app/models/relationships";
 
 
-export const authOptions = {
+export const authOptions:NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
@@ -94,10 +94,10 @@ export const authOptions = {
     signIn: "/login",
   },
   session: {
-    storage: "jwt",
+    strategy: "jwt",
   },
 };
 
-export const handler = NextAuth(authOptions as any);
+export const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
