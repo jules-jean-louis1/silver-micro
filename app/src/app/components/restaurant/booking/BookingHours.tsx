@@ -25,9 +25,14 @@ export const BookingHours: React.FC<BookingHoursProps> = (props) => {
   return (
     <div className="grid grid-cols-4 gap-4">
       {displayHours().map((hour, index) => (
-        <Button key={index} onClick={() => setSelectedHours(hour)}>
-        {hour}
-      </Button>
+        <Button
+          key={index}
+          onClick={() => setSelectedHours(hour)}
+          className="h-fit-content"
+          variant="outline"
+        >
+          {hour}
+        </Button>
       ))}
     </div>
   );

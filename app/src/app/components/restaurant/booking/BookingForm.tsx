@@ -2,14 +2,13 @@ import { FC, useEffect, useState } from "react";
 import { Calendar } from "./Calendar";
 import { BookingHours } from "./BookingHours";
 import { BookingSeat } from "./BookingSeat";
-import {
-  format,
-} from "date-fns";
-import { da, fr } from "date-fns/locale";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { formatDateWithoutUTCConversion } from "@/app/utils/Booking";
-import { useSession } from "next-auth/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ProgressBarBooking } from "./ProgressBarBooking";
 
 type StepName = "date" | "time" | "seats" | "confirm";
 
@@ -30,8 +29,6 @@ interface BookingFormProps {
 }
 
 export const BookingForm: FC<BookingFormProps> = (props) => {
-  const { data } = useSession();
-  console.log(data);
   const { id } = useParams<{ id: string }>();
   const { restaurant } = props;
   const [steps, setSteps] = useState([...STEPS]);
@@ -111,6 +108,10 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   }, [selectedDay, selectedHours, selectedSeat]);
 
   useEffect(() => {
+    if (selectedDay === null || selectedHours === null || selectedSeat === null) {
+      setActiveStep("date");
+      return;
+    }
     if (clickedConfim) {
       (async () => {
         const response = await fetch("/api/booking", {
@@ -123,19 +124,25 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         });
         const data = await response.json();
 
-        console.log(data);
       })();
       setClickedConfirm(false);
     }
   }, [clickedConfim]);
 
   return (
-    <div>
+    <div className="lg:max-h-[10rem] lg:min-h-[10rem] lg:min-w-[6rem]">
+      <ProgressBarBooking activeStep={activeStep} />
       <div>
-        <h1>{steps.find((step) => step.name === activeStep)?.title}</h1>
-        <div>
-          <Button onClick={previousStep}>Précédent</Button>
-          <Button onClick={nextStep}>Suivant</Button>
+        <div className="flex justify-between items-center">
+          <Button onClick={previousStep} variant="outline" size="icon">
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <div>
+            <h3 className="font-semibold">{steps.find((step) => step.name === activeStep)?.title}</h3>
+          </div>
+          <Button onClick={nextStep} variant="outline" size="icon">
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
       <div>
