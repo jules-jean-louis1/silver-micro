@@ -1,30 +1,18 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../api/config";
+import { Table, Column, Model, ForeignKey } from 'sequelize-typescript';
 import { Restaurant } from "./restaurant";
 import { CookingType } from "./cooking_type";
 
-export const CookingTypeRestaurant = sequelize.define(
-    "cooking_type_restaurant",
-    {
-        restaurant_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: Restaurant,
-                key: "id",
-            },
-        },
-        cooking_type_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: CookingType,
-                key: "id",
-            },
-        },
-    },
-    {
-        timestamps: false,
-        freezeTableName: true,
-    }
-);
+@Table({
+    tableName: 'cooking_type_restaurant',
+    timestamps: false,
+    freezeTableName: true,
+})
+export class CookingTypeRestaurant extends Model {
+    @ForeignKey(() => Restaurant)
+    @Column
+    restaurant_id: number;
+
+    @ForeignKey(() => CookingType)
+    @Column
+    cooking_type_id: number;
+}

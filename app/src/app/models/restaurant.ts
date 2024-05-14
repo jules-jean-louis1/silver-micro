@@ -1,47 +1,54 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../api/config";
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  AutoIncrement,
+  BelongsToMany,
+} from 'sequelize-typescript';
+import { Dishes } from './dishes';
+import { DishesRestaurant } from './dishes_restaurant';
+import { FrameAmbience } from './frame_ambience';
+import { FrameAmbienceRestaurant } from './frame_ambience_restaurant';
 
-export const Restaurant = sequelize.define(
-  "restaurant",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    seat: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    close_monday: {
-      type: DataTypes.BOOLEAN,
-    },
-    close_tuesday: {
-      type: DataTypes.BOOLEAN,
-    },
-    opening_time: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    closing_time: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    timestamps: false,
-    freezeTableName: true,
-  }
-);
+@Table({
+  tableName: 'restaurant',
+  timestamps: false,
+  freezeTableName: true,
+})
+export class Restaurant extends Model {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  id: number;
+
+  @Column
+  name: string;
+
+  @Column
+  seat: number;
+
+  @Column
+  description: string;
+
+  @Column
+  close_monday: boolean;
+
+  @Column
+  close_tuesday: boolean;
+
+  @Column
+  opening_time: string;
+
+  @Column
+  closing_time: string;
+
+  @Column
+  address: string;
+
+  @BelongsToMany(() => Dishes, () => DishesRestaurant)
+  dishes: Dishes[];
+
+  @BelongsToMany(() => FrameAmbience, () => FrameAmbienceRestaurant)
+  frame_ambience: FrameAmbience[];
+}

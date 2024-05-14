@@ -1,21 +1,15 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../api/config";
+import { Table, Column, Model, PrimaryKey } from 'sequelize-typescript';
 
-export const CookingType = sequelize.define(
-  "cooking_type",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: false,
-    freezeTableName: true,
-  }
-);
+@Table({
+  tableName: 'cooking_type',
+  timestamps: false,
+  freezeTableName: true,
+})
+export class CookingType extends Model {
+  @PrimaryKey
+  @Column
+  id: number;
+
+  @Column
+  name: string;
+}

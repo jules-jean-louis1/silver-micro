@@ -1,34 +1,30 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../api/config";
+import {
+  Table,
+  Column,
+  Model,
+  ForeignKey,
+  PrimaryKey,
+} from "sequelize-typescript";
 import { Customer } from "./customer";
 
-export const CustomerFavorite = sequelize.define(
-  "customer_favorite",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    customer_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Customer,
-        key: "id",
-      },
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-  },
-  {
-    timestamps: false,
-    freezeTableName: true,
-  }
-);
+@Table({
+  tableName: "customer_favorite",
+  timestamps: false,
+  freezeTableName: true,
+})
+export class CustomerFavorite extends Model {
+  @PrimaryKey
+  @Column({ allowNull: true })
+  @PrimaryKey
+  id: number;
+
+  @ForeignKey(() => Customer)
+  @Column({ allowNull: false })
+  customer_id: number;
+
+  @Column({ allowNull: false })
+  created_at: Date;
+
+  @Column({ allowNull: true })
+  updated_at: Date;
+}

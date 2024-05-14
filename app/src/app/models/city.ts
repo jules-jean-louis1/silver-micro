@@ -1,21 +1,16 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../api/config";
+import { Table, Column, Model, PrimaryKey, AutoIncrement } from 'sequelize-typescript';
 
-export const City = sequelize.define(
-  "city",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: false,
-    freezeTableName: true,
-  }
-);
+@Table({
+  tableName: 'city',
+  timestamps: false,
+  freezeTableName: true,
+})
+export class City extends Model {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  id: number;
+
+  @Column
+  name: string;
+}
