@@ -7,6 +7,7 @@ const sequelize = new Sequelize({
   password: '',
   host: 'localhost',
   models: [__dirname + '/models'], 
+  dialectModule: require('mysql2'),
 });
 
 export async function connectToDatabase() {

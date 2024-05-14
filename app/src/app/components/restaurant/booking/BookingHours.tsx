@@ -70,8 +70,7 @@ export const BookingHours: React.FC<BookingHoursProps> = (props) => {
           key={index}
           onClick={() => {
             setSelectedHours(hour);
-            setRestaurantSeats(computeSeatsHour(hour)),
-              console.log("com⁰", computeSeatsHour(hour));
+            setRestaurantSeats(computeSeatsHour(hour));
           }}
           size="sm"
           variant="outline"

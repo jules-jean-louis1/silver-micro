@@ -135,7 +135,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       setClickedConfirm(false);
     }
   }, [clickedConfim]);
-  
+
   return (
     <div className="lg:max-h-[10rem] lg:min-h-[10rem] lg:min-w-[6rem]">
       <ProgressBarBooking activeStep={activeStep} />
@@ -174,6 +174,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           <BookingSeat
             setSelectedSeat={setSelectedSeat}
             restaurantSeats={restaurantSeats}
+            restaurant={restaurant}
           />
         )}
         {isStepActive("confirm") && (
