@@ -30,11 +30,5 @@ export const CustomerRole = sequelize.define(
   {
     timestamps: false,
     tableName: "customer_role_restaurant",
-    constraints: {
-      foreignKey: {
-        name: "customer_role_restaurant_restaurant_id_fk",
-        allowNull: true,
-      },
-    },
   }
 );
