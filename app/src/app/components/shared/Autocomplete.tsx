@@ -28,7 +28,7 @@ export const Autocomplete: React.FC = () => {
     console.log(selectedCity)
     console.log(search);
     (async () => {
-        const resp = await fetch(`/api/restaurant/search/${selectedCity}/${search}`);
+        const resp = await fetch(`/api/restaurant/search?city=${selectedCity}&restaurant_name=${search}`);
         const data = await resp.json();
         console.log(data);
     })();
