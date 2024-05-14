@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 
@@ -45,6 +46,7 @@ export const Autocomplete: React.FC = () => {
                 })}
             </select>
             <Input placeholder="Rechercher un restaurant" onChange={(e) => (handleSearch(e))} />
+            <Button variant="outline" size="sm">Rechercher</Button>
         </div>
       </div>
     </>

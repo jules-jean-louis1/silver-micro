@@ -22,11 +22,11 @@ function RestaurantPage() {
     <>
       <section className="w-screen h-[calc(100vh-56px)] grid grid-flow-row grid-cols-3">
         <article></article>
-        <article> 
-          <RestaurantMenu  restaurant={restaurant}/>
+        <article className="mt-4">
+          <RestaurantMenu restaurant={restaurant} />
         </article>
-        <article>
-          <BookingForm restaurant={restaurant}/>
+        <article className="mt-4">
+          <BookingForm restaurant={restaurant} />
         </article>
       </section>
     </>
