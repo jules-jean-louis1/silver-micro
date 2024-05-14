@@ -32,6 +32,11 @@ Restaurant.belongsToMany(CookingType, {
   foreignKey: "restaurant_id",
 });
 
+Restaurant.belongsToMany(FrameAmbience, {
+  through: FrameAmbienceRestaurant,
+  foreignKey: "restaurant_id",
+});
+
 Restaurant.hasMany(FrameAmbienceRestaurant, {
   foreignKey: "restaurant_id",
 });

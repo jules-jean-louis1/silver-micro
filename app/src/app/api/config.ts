@@ -1,9 +1,12 @@
-const { Sequelize } = require("sequelize");
+import { Sequelize } from 'sequelize-typescript';
 
-const sequelize = new Sequelize("silver_micro", "root", "", {
-  host: "localhost",
-  dialect: "mysql",
-  dialectModule: require("mysql2"),
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  database: 'silver_micro',
+  username: 'root',
+  password: '',
+  host: 'localhost',
+  models: [__dirname + '/models'], 
 });
 
 export async function connectToDatabase() {
@@ -12,7 +15,7 @@ export async function connectToDatabase() {
     console.log('Connexion à la base de données réussie');
   } catch (error) {
     console.error('Impossible de se connecter à la base de données :', error);
-    throw error; // Relancer l'erreur pour la gérer plus loin
+    throw error; 
   }
 }
 

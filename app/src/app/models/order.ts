@@ -35,6 +35,11 @@ export const Order = sequelize.define(
         key: "id",
       },
     },
+    status: {
+      type: DataTypes.ENUM("pending", "completed", "cancelled", "confirmed"),
+      allowNull: false,
+      defaultValue: "pending",
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

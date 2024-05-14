@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, use, useEffect, useState } from "react";
 import { Calendar } from "./Calendar";
 import { BookingHours } from "./BookingHours";
 import { BookingSeat } from "./BookingSeat";
@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 import { formatDateWithoutUTCConversion } from "@/app/utils/Booking";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProgressBarBooking } from "./ProgressBarBooking";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 type StepName = "date" | "time" | "seats" | "confirm";
 
@@ -29,6 +31,7 @@ interface BookingFormProps {
 }
 
 export const BookingForm: FC<BookingFormProps> = (props) => {
+  const { data } = useSession();
   const { id } = useParams<{ id: string }>();
   const { restaurant } = props;
   const [steps, setSteps] = useState([...STEPS]);
@@ -41,12 +44,13 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
     start: "",
     end: "",
   });
-  const [restaurantSeats, setRestaurantSeats] = useState(0);
+  const [restaurantSeats, setRestaurantSeats] = useState<number>(0);
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [selectedHours, setSelectedHours] = useState<any>(null);
   const [selectDate, setSelectDate] = useState<String | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
 
+  const [orderOfDay, setOrderOfDay] = useState<any>([]);
   const [clickedConfim, setClickedConfirm] = useState(false);
 
   const isStepActive = (stepName: StepName) => activeStep === stepName;
@@ -108,7 +112,11 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   }, [selectedDay, selectedHours, selectedSeat]);
 
   useEffect(() => {
-    if (selectedDay === null || selectedHours === null || selectedSeat === null) {
+    if (
+      selectedDay === null ||
+      selectedHours === null ||
+      selectedSeat === null
+    ) {
       setActiveStep("date");
       return;
     }
@@ -123,12 +131,11 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           }),
         });
         const data = await response.json();
-
       })();
       setClickedConfirm(false);
     }
   }, [clickedConfim]);
-
+  
   return (
     <div className="lg:max-h-[10rem] lg:min-h-[10rem] lg:min-w-[6rem]">
       <ProgressBarBooking activeStep={activeStep} />
@@ -138,7 +145,9 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h3 className="font-semibold">{steps.find((step) => step.name === activeStep)?.title}</h3>
+            <h3 className="font-semibold">
+              {steps.find((step) => step.name === activeStep)?.title}
+            </h3>
           </div>
           <Button onClick={nextStep} variant="outline" size="icon">
             <ChevronRight className="h-4 w-4" />
@@ -153,6 +162,12 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           <BookingHours
             setSelectedHours={setSelectedHours}
             opperatingHours={opperatingHours}
+            selectedDay={selectedDay}
+            orderOfDay={orderOfDay}
+            setOrderOfDay={setOrderOfDay}
+            restaurantSeats={restaurantSeats}
+            setRestaurantSeats={setRestaurantSeats}
+            restaurant={restaurant}
           />
         )}
         {isStepActive("seats") && (
@@ -172,7 +187,15 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
             </p>
             <p>Heure: {selectedHours}</p>
             <p>Nombre de personnes: {selectedSeat}</p>
-            <Button onClick={() => setClickedConfirm(true)}>Confirmer</Button>
+            {data ? (
+              <Button onClick={() => setClickedConfirm(true)}>Confirmer</Button>
+            ) : (
+              <Button variant={"outline"}>
+                <Link href="/login">
+                  Connectez-vous pour confirmer votre réservation
+                </Link>
+              </Button>
+            )}
           </div>
         )}
       </div>

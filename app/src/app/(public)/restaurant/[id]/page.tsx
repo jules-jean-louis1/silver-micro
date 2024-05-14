@@ -1,5 +1,6 @@
 "use client";
 
+import { RestaurantMenu } from "@/app/components/restaurant/RestaurantMenu";
 import { BookingForm } from "@/app/components/restaurant/booking/BookingForm";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
 function RestaurantPage() {
   const { id } = useParams<{ id: string }>();
 
-  const [restaurant, setRestaurant] = useState(null);
+  const [restaurant, setRestaurant] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -21,7 +22,8 @@ function RestaurantPage() {
     <>
       <section className="w-screen h-[calc(100vh-56px)] grid grid-flow-row grid-cols-3">
         <article></article>
-        <article>
+        <article> 
+          <RestaurantMenu  restaurant={restaurant}/>
         </article>
         <article>
           <BookingForm restaurant={restaurant}/>

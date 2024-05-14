@@ -24,6 +24,8 @@ export const BookingSeat: FC<BookingSeatProps> = (props) => {
           onClick={(e) =>
             setSelectedSeat(Number((e.target as HTMLButtonElement).textContent))
           }
+          size="sm"
+          variant="outline"
         >
           {seat}
         </Button>
