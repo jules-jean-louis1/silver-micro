@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 export const Autocomplete: React.FC = () => {
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
+  const [autocompleteResults, setAutocompleteResults] = useState([]);
 
   const [selectedCity, setSelectedCity] = useState<any>("");
 
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
+    setAutocompleteResults([]);
   }
 
   const handleCity = (e: any) => {
@@ -23,15 +25,13 @@ export const Autocomplete: React.FC = () => {
       setCities(data);
     })();
   }, []);
-
+  
   useEffect(() => {
     if (search === "") return;
-    console.log(selectedCity)
-    console.log(search);
     (async () => {
         const resp = await fetch(`/api/restaurant/search?city=${selectedCity}&restaurant_name=${search}`);
         const data = await resp.json();
-        console.log(data);
+        setAutocompleteResults(data);
     })();
   }, [search]);
 
@@ -40,7 +40,7 @@ export const Autocomplete: React.FC = () => {
       <div className="rounded-lg border border-green-100">
         <div className="flex items-center">
             <select className="w-40" onChange={(e) =>(handleCity(e))}>
-                <option value="">Ville</option>
+                <option value="">Toutes les villes</option>
                 {cities.map((city: any) => {
                     return <option key={city.id} value={city.id}>{city.name}</option>;
                 })}
@@ -48,6 +48,13 @@ export const Autocomplete: React.FC = () => {
             <Input placeholder="Rechercher un restaurant" onChange={(e) => (handleSearch(e))} />
             <Button variant="outline" size="sm">Rechercher</Button>
         </div>
+      </div>
+      <div className="mt-4">
+        {autocompleteResults.map((result: any) => (
+          <div key={result.id} className="bg-gray-100 p-2 rounded-lg">
+            <p>{result.name}</p>
+          </div>
+        ))}
       </div>
     </>
   );

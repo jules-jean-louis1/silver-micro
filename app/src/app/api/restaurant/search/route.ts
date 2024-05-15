@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import "@/app/models/relationships";
 
 export async function GET(request: any) {
+  
   const { searchParams } = new URL(request.url);
   const city = searchParams.get("city") || "";
   const restaurantName = searchParams.get("restaurant_name") || "";
@@ -30,7 +31,7 @@ export async function GET(request: any) {
     include: {
       model: City,
       where: {
-        name: {
+        id: {
           [Op.like]: `%${city}%`,
         },
       },
