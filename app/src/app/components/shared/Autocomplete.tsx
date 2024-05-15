@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
@@ -16,6 +17,11 @@ export const Autocomplete: React.FC = () => {
 
   const handleCity = (e: any) => {
     setSelectedCity(e.target.value);
+  }
+
+  const handleRestaurantClick = (e: any) => {
+    setSearch("");
+    setAutocompleteResults([]);
   }
 
   useEffect(() => {
@@ -52,7 +58,9 @@ export const Autocomplete: React.FC = () => {
       <div className="mt-4">
         {autocompleteResults.map((result: any) => (
           <div key={result.id} className="bg-gray-100 p-2 rounded-lg">
-            <p>{result.name}</p>
+            <Link href={`/restaurant/${result.id}`} onClick={(e) => (handleRestaurantClick(e))}>
+              {result.name}
+            </Link>
           </div>
         ))}
       </div>
