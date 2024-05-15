@@ -1,13 +1,9 @@
-import { Sequelize } from 'sequelize-typescript';
+const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize({
-  dialect: 'mysql',
-  database: 'silver_micro',
-  username: 'root',
-  password: '',
-  host: 'localhost',
-  models: [__dirname + '/models'], 
-  dialectModule: require('mysql2'),
+const sequelize = new Sequelize("silver_micro", "root", "", {
+  host: "localhost",
+  dialect: "mysql",
+  dialectModule: require("mysql2"),
 });
 
 export async function connectToDatabase() {
