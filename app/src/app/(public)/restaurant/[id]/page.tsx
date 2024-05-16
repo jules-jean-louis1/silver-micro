@@ -20,7 +20,7 @@ function RestaurantPage() {
 
   return (
     <>
-      <section className="w-screen h-[calc(100vh-56px)] grid grid-flow-row grid-cols-3">
+      <section className="w-screen h-[calc(100vh-56px)] grid grid-flow-row grid-cols-3 bg-flora-white pt-4">
         <article></article>
         <article className="mt-4">
           <RestaurantMenu restaurant={restaurant} />

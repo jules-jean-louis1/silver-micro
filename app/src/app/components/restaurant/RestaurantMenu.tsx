@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carrot, Dot, MapPin } from "lucide-react";
 import { FC } from "react";
+import { ManageFavorites } from "../favorites/ManageFavorites";
 
 type RestaurantMenuProps = {
   restaurant: any;
@@ -30,7 +31,10 @@ export const RestaurantMenu: FC<RestaurantMenuProps> = (props) => {
             </span>
           </h4>
         </div>
+        <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">{restaurant?.name}</h1>
+        <ManageFavorites restaurant={restaurant} />
+        </div>
       </section>
       <section className="flex flex-col space-y-2">
         <div className="flex items-center space-x-2">

@@ -3,7 +3,6 @@ import { CityRestaurant } from "./city_restaurant";
 import { CookingType } from "./cooking_type";
 import { CookingTypeRestaurant } from "./cooking_type_restaurant";
 import { Customer } from "./customer";
-import { CustomerFavorite } from "./customer_favorite";
 import { Dishes } from "./dishes";
 import { DishesRestaurant } from "./dishes_restaurant";
 import { FrameAmbience } from "./frame_ambience";
@@ -13,6 +12,7 @@ import { RestaurantMenu } from "./restaurant_menu";
 import { RestaurantPhoto } from "./restaurant_photo";
 import { CustomerRole } from "./customer_role_restaurant";
 import { Order } from "./order";
+import { Favorite } from "./customer_favorite";
 
 /* 
     RESTAURANT 
@@ -58,6 +58,10 @@ CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
 Restaurant.hasMany(Order, {
   foreignKey: "restaurant_id",
 });
+Restaurant.belongsToMany(Customer, {
+  through: Favorite,
+  foreignKey: "restaurant_id",
+});
 /*
   RESTAURANT_MENU
   */
@@ -99,7 +103,8 @@ City.belongsToMany(Restaurant, {
 /*
   CUSTOMER_FAVORITE 
   */
-CustomerFavorite.belongsTo(Customer, {
+Customer.belongsToMany(Restaurant, {
+  through: Favorite,
   foreignKey: "customer_id",
 });
 
