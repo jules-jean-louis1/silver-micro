@@ -28,22 +28,24 @@ export const Header = () => {
   };
 
   return (
-    <header className="w-screen h-14 lg:py-3 lg:px-2 border border-b-green-200">
+    <header className="w-screen h-14 lg:py-2 lg:px-2 border border-b-wheat bg-flora-white">
       <div className="w-full flex justify-between">
         <div className="flex items-center space-x-2">
           <div>
-            <Link href="/">Miam</Link>
+            <Link href="/">
+              <img src="/shared/icon/logoHeader.svg" alt="Logo-Miam" />
+            </Link>
           </div>
           <nav className="flex">
-            <ul className="flex items-center space-x-2">
+            <ul className="flex items-center space-x-4">
               <li>
                 <Link href="/restaurants">
-                  <h6>Restaurants</h6>
+                  <h4 className="text-lg text-green-olive">Restaurants</h4>
                 </Link>
               </li>
               <li>
                 <Link href="/about">
-                  <h6>A propos</h6>
+                  <h4 className="text-lg text-green-olive">A propos</h4>
                 </Link>
               </li>
             </ul>
@@ -53,7 +55,8 @@ export const Header = () => {
         <div>
           {data ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-center max-h-10 space-x-2">
+              <DropdownMenuTrigger className="flex items-center justify-center h-10 w-[7rem] space-x-4 rounded-[8px] bg-green-olive text-flora-white font-semibold">
+                <UserRound className="h-6 w-6" />
                 {data.user.firstname}
               </DropdownMenuTrigger>
               <DropdownMenuContent>
