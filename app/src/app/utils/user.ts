@@ -40,8 +40,8 @@ export const canAccessAdminInterface = (session: AppSession): boolean => {
   }
   return session.roles.some(
     (role) =>
-      role.role === USER_ROLE.ADMIN ||
       role.role === USER_ROLE.SUPER_ADMIN ||
+      role.role === USER_ROLE.ADMIN ||
       role.role === USER_ROLE.MANAGER
   );
 };

@@ -53,7 +53,7 @@ Restaurant.belongsToMany(City, {
   through: CityRestaurant,
   foreignKey: "restaurant_id",
 });
-
+CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
 /*
   RESTAURANT_MENU
   */
