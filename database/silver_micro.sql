@@ -19,12 +19,11 @@ create table customer
         primary key,
     firstname  varchar(255) null,
     lastname   varchar(255) null,
-    role       varchar(255) not null,
     email      varchar(255) not null,
     password   varchar(255) not null,
     avatar     varchar(255) null,
     created_at datetime     not null,
-    update_at  int          null
+    updated_at datetime     null
 );
 
 create table customer_favorite
@@ -37,11 +36,6 @@ create table customer_favorite
     constraint customer_favorite_customer_id_fk
         foreign key (customer_id) references customer (id)
 );
-
-alter table customer
-    add constraint customer_customer_favorite_customer_id_fk
-        foreign key (id) references customer_favorite (customer_id)
-            on delete cascade;
 
 create table dishes
 (
@@ -110,6 +104,17 @@ create table cooking_type_restaurant
             on update cascade on delete cascade
 );
 
+create table customer_role_restaurant
+(
+    customer_id   int         not null,
+    restaurant_id int         null,
+    role          varchar(50) not null,
+    constraint customer_role_restaurant_customer_id_fk
+        foreign key (customer_id) references customer (id),
+    constraint customer_role_restaurant_restaurant_id_fk
+        foreign key (restaurant_id) references restaurant (id)
+);
+
 create table dishes_restaurant
 (
     restaurant_id int not null,
@@ -139,7 +144,7 @@ create table restaurant_menu
     id            int auto_increment
         primary key,
     name          varchar(255) not null,
-    description   text         not null,
+    description   text         null,
     price         float        null,
     status        varchar(50)  not null,
     restaurant_id int          not null,
