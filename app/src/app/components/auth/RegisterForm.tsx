@@ -9,8 +9,7 @@ type RegisterFormProps = {
 
 export const RegisterForm = ({ setSuccessRegister}: RegisterFormProps) => {
 
-
-  const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
         const response = await fetch('/api/auth/register', {
@@ -40,7 +39,7 @@ export const RegisterForm = ({ setSuccessRegister}: RegisterFormProps) => {
 
   return (
     <>
-      <form action="" method="post" className="h-full" onSubmit={handelSubmit}>
+      <form action="" method="post" className="h-full" onSubmit={handleSubmit}>
         <div className="flex flex-col justify-between h-full">
           <FloatingLabelInput
             id="email"
