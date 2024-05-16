@@ -37,8 +37,6 @@ export async function PUT(request: any) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
 
-    const salt = bcrypt.genSaltSync(10);
-
     const customer = await Customer.update(
       {
         firstname: body.firstname,

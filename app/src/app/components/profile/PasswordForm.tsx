@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FloatingLabelInput } from "@/components/ui/FloatingInput";
 import { useState } from "react";   
+import { id } from "date-fns/locale";
 
-export const PasswordForm = () => {
+type PasswordFormProps = {
+    setSuccessPassword: (value: boolean) => void;
+};
+
+export const PasswordForm = ({ setSuccessPassword}: PasswordFormProps) => {
     const { data } = useSession();
     const [formData, setFormData] = useState({
         password: "",
@@ -20,16 +25,30 @@ export const PasswordForm = () => {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        const user_id = data && data.user.id;
+
         e.preventDefault();
         const password = formData.password;
         const confirmPassword = formData.confirmPassword;
 
         try {
-            await signIn("credentials", {
-                redirect: false,
-                password,
-                confirmPassword,
+            const response = await fetch('/api/profile/password', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: user_id,
+                    password,
+                    confirmPassword,
+                }),
             });
+            const data = await response.json();
+            if (response.ok) {
+                setSuccessPassword(true);
+            } else {
+                console.error(data.error);
+            }
         } catch (error) {
             console.error("Edit failed", error);
         }
@@ -46,7 +65,7 @@ export const PasswordForm = () => {
                                 name="password"
                                 type="password"
                                 label="Mot de passe"
-                                value=""
+                                value={formData.password}
                                 onChange={handleChange}
                             />
                             <FloatingLabelInput
@@ -54,7 +73,7 @@ export const PasswordForm = () => {
                                 name="confirmPassword"
                                 type="password"
                                 label="Confirmer mot de passe"
-                                value=""
+                                value={formData.confirmPassword}
                                 onChange={handleChange}
                             />
                             <Button type="submit" className="w-full flex space-x-3 items-center">
