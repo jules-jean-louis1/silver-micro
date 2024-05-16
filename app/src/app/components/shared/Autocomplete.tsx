@@ -48,7 +48,7 @@ export const Autocomplete: React.FC = () => {
             <select className="w-40" onChange={(e) =>(handleCity(e))}>
                 <option value="">Toutes les villes</option>
                 {cities.map((city: any) => {
-                    return <option key={city.id} value={city.id}>{city.name}</option>;
+                    return <option key={city.id} value={city.name}>{city.name}</option>;
                 })}
             </select>
             <Input placeholder="Rechercher un restaurant" onChange={(e) => (handleSearch(e))} />

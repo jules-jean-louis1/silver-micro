@@ -31,7 +31,7 @@ export async function GET(request: any) {
     include: {
       model: City,
       where: {
-        id: {
+        name: {
           [Op.like]: `%${city}%`,
         },
       },
