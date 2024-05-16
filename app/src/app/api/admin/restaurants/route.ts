@@ -75,14 +75,6 @@ export async function PUT(req: any) {
   }
   const body = await req.json();
 
-  console.log(
-    body.restaurant_id,
-    body.name,
-    body.seat,
-    body.description,
-    body.address,
-    body.city_id
-  );
   if (
     !body.restaurant_id ||
     !body.name ||

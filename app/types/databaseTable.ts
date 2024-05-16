@@ -14,6 +14,31 @@ export type Restaurant = {
   dishes: Dish[];
   cities: City[];
 };
+
+export type Booking = {
+  id: number;
+  date: string;
+  seat: number;
+  restaurant_id: number;
+  customer_id: number;
+  status: null | string; 
+  created_at: string;
+  updated_at: null | string;
+  customer: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    avatar: null | string;
+    created_at: string;
+    updated_at: null | string;
+  };
+  restaurant: {
+    id: number;
+    name: string;
+  };
+};
 export type Menu = {
   id: number;
   name: string;
@@ -49,4 +74,10 @@ export type City = {
     restaurant_id: number;
     city_id: number;
   };
+};
+
+export type CustomerRole = {
+  id: number;
+  customer_id: number;
+  restaurant_id: number | null;
 };

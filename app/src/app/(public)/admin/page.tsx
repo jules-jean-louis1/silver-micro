@@ -1,4 +1,5 @@
 "use client";
+import { AdminBookingList } from "@/app/components/admin/booking/AdminBookingList";
 import { AdminRestaurantList } from "@/app/components/admin/restaurants/AdminRestaurantList";
 import { useSessionContext } from "@/app/utils/useSessionContext";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,7 @@ function AdminPage() {
         </article>
         <article className="w-full">
           {section === "restaurant" && <AdminRestaurantList />}
+          {section === "booking" && <AdminBookingList />}
         </article>
       </section>
     </>

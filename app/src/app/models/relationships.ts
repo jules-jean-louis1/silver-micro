@@ -12,6 +12,7 @@ import { Restaurant } from "./restaurant";
 import { RestaurantMenu } from "./restaurant_menu";
 import { RestaurantPhoto } from "./restaurant_photo";
 import { CustomerRole } from "./customer_role_restaurant";
+import { Order } from "./order";
 
 /* 
     RESTAURANT 
@@ -54,6 +55,9 @@ Restaurant.belongsToMany(City, {
   foreignKey: "restaurant_id",
 });
 CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
+Restaurant.hasMany(Order, {
+  foreignKey: "restaurant_id",
+});
 /*
   RESTAURANT_MENU
   */
@@ -71,16 +75,19 @@ RestaurantPhoto.belongsTo(Restaurant, {
 /*
     CUSTOMER
 */
+Customer.hasMany(Order, { foreignKey: "customer_id" });
+Order.belongsTo(Customer, {
+  foreignKey: "customer_id",
+});
+/*
+CUSTOMER_ROLE
+*/
+
 Customer.belongsToMany(Restaurant, {
   through: CustomerRole,
   foreignKey: "customer_id",
   constraints: false,
 });
-
-/*
-CUSTOMER_ROLE
-*/
-
 /*
   CITY
 */
@@ -118,4 +125,11 @@ Dishes.belongsToMany(Restaurant, {
 FrameAmbience.belongsToMany(Restaurant, {
   through: FrameAmbienceRestaurant,
   foreignKey: "frame_ambience_id",
+});
+
+/*
+  ORDER
+  */
+Order.belongsTo(Restaurant, {
+  foreignKey: "restaurant_id",
 });
