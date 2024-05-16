@@ -75,7 +75,7 @@ export const Header = () => {
                 )}
                 {/* <DropdownMenuItem>Team</DropdownMenuItem> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Déconnexion</span>
                 </DropdownMenuItem>

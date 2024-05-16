@@ -1,6 +1,7 @@
 "use client";
 import { AdminBookingList } from "@/app/components/admin/booking/AdminBookingList";
 import { AdminRestaurantList } from "@/app/components/admin/restaurants/AdminRestaurantList";
+import { AdminUserList } from "@/app/components/admin/user/AdminUserList";
 import { useSessionContext } from "@/app/utils/useSessionContext";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
@@ -20,7 +21,9 @@ function AdminPage() {
   };
 
   useEffect(() => {
-    handleSection("restaurant");
+    if (section === "") {
+      handleSection("restaurant");
+    }
   }, []);
 
   return isAuthorized ? (
@@ -54,6 +57,7 @@ function AdminPage() {
         <article className="w-full">
           {section === "restaurant" && <AdminRestaurantList />}
           {section === "booking" && <AdminBookingList />}
+          {section === "users" && <AdminUserList />}
         </article>
       </section>
     </>

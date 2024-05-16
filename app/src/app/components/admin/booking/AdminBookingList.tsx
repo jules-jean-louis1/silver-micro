@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,11 +12,37 @@ import {
 import { Booking } from "../../../../../types/databaseTable";
 import { AdminBookingEdit } from "./AdminBookingEdit";
 import { bookingStatus } from "@/app/utils/Booking";
+import { Button } from "@/components/ui/button";
 
 export const AdminBookingList = () => {
   const { data } = useSession();
   const [booking, setBooking] = useState<Booking[]>([]);
   const [successEdit, setSuccessEdit] = useState<boolean>(false);
+  const [successDelete, setSuccessDelete] = useState<boolean>(false);
+  const [clickedDelete, setClickedDelete] = useState<boolean>(false);
+  const [buttonValue, setButtonValue] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (clickedDelete) {
+      (async () => {
+        const resp = await fetch(
+          `/api/admin/booking?userId=${data?.user.id}&order_id=${buttonValue}`,
+          {
+            method: "DELETE",
+          }
+        );
+        const resp_delete = await resp.json();
+        if (resp_delete.error) {
+          console.error(resp_delete.error);
+          return;
+        }
+        if (resp_delete.success) {
+          setSuccessDelete(true);
+        }
+      })();
+      setClickedDelete(false);
+    }
+  }, [clickedDelete]);
 
   useEffect(() => {
     (async () => {
@@ -24,8 +50,9 @@ export const AdminBookingList = () => {
       const resp_booking = await resp.json();
       setBooking(resp_booking);
       setSuccessEdit(false);
+      setSuccessDelete(false);
     })();
-  }, [successEdit]);
+  }, [successEdit, successDelete]);
 
   return (
     <>
@@ -61,6 +88,16 @@ export const AdminBookingList = () => {
                     successEdit={successEdit}
                     setSuccessEdit={setSuccessEdit}
                   />
+                  <Button
+                    variant={"destructive"}
+                    onClick={(e) => {
+                      setButtonValue(e.currentTarget.value);
+                      setClickedDelete(true);
+                    }}
+                    value={booking.id}
+                  >
+                    Supprimer
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

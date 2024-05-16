@@ -79,3 +79,24 @@ export async function PUT(req: any) {
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: any) {
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get("userId") || "";
+  const order_id = searchParams.get("order_id") || "";
+  try {
+    const order = await Order.findOne({
+      where: {
+        id: order_id,
+      },
+    });
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+    await order.destroy();
+    return NextResponse.json({ success: "Order deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+  }
+}

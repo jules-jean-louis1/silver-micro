@@ -45,3 +45,15 @@ export const canAccessAdminInterface = (session: AppSession): boolean => {
       role.role === USER_ROLE.MANAGER
   );
 };
+
+export const canManageRestaurant = (session: AppSession, restaurantId: number) => {
+  if (!session || !session.roles) {
+    return false;
+  }
+  return session.roles.some(
+    (role) =>
+      role.role === USER_ROLE.SUPER_ADMIN ||
+      (role.role === USER_ROLE.ADMIN && role.restaurant_id === restaurantId) ||
+      (role.role === USER_ROLE.MANAGER && role.restaurant_id === restaurantId)
+  );
+}
