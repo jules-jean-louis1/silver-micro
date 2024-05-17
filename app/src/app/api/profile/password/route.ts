@@ -13,10 +13,7 @@ export async function PUT(request: any) {
     if (!body) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
-    if (
-      body.password.length === 0 ||
-      body.confirmPassword.length === 0
-    ) {
+    if (body.password.length === 0 || body.confirmPassword.length === 0) {
       return NextResponse.json({ error: "Missing Fields" }, { status: 400 });
     }
     if (!validatePassword(body.password)) {
@@ -39,14 +36,13 @@ export async function PUT(request: any) {
     const hash = bcrypt.hashSync(body.password, salt);
 
     const customer = await Customer.update(
-    {
-      password: hash,
-      updated_at: new Date(new Date().getTime() + 2 * 60 * 60 * 1000)
-    },
-    {
-      where: { id : body.id }
-    }
-    
+      {
+        password: hash,
+        updated_at: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+      },
+      {
+        where: { id: body.id },
+      }
     );
 
     if (!customer) {
@@ -55,9 +51,11 @@ export async function PUT(request: any) {
         { status: 500 }
       );
     } else {
-      return NextResponse.json({ message: "Customer updated successfully" }, { status: 201 });
+      return NextResponse.json(
+        { message: "Customer updated successfully" },
+        { status: 201 }
+      );
     }
-
   } catch (error) {
     console.log("errorLog", error);
     return Response.json({ error }, { status: 500 });

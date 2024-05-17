@@ -63,7 +63,7 @@ export const Header = () => {
                 <DropdownMenuLabel>Votre Compte</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href="/profil">
+                  <Link href="/profile">
                     <UserRound className="mr-2 h-4 w-4" />
                     <span>Profil</span>
                   </Link>

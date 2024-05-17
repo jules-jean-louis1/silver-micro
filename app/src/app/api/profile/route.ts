@@ -4,7 +4,6 @@ import sequelize from "@/app/api/config";
 import bcrypt from "bcryptjs";
 import { validateEmail } from "@/app/utils/validateForm";
 import "@/app/models/relationships";
-import { UpdatedAt } from "sequelize-typescript";
 
 sequelize.sync();
 
@@ -48,15 +47,6 @@ export async function PUT(request: any) {
         where: { email: body.email },
       }
     );
-    const customerExists = await Customer.findOne({
-      where: { email: body.email },
-    });
-    if (customerExists) {
-      return NextResponse.json(
-        { error: "Email already exists" },
-        { status: 400 }
-      );
-    }
 
     if (!customer) {
       return NextResponse.json(
