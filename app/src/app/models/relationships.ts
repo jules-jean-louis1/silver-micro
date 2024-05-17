@@ -3,7 +3,6 @@ import { CityRestaurant } from "./city_restaurant";
 import { CookingType } from "./cooking_type";
 import { CookingTypeRestaurant } from "./cooking_type_restaurant";
 import { Customer } from "./customer";
-import { CustomerFavorite } from "./customer_favorite";
 import { Dishes } from "./dishes";
 import { DishesRestaurant } from "./dishes_restaurant";
 import { FrameAmbience } from "./frame_ambience";
@@ -12,6 +11,8 @@ import { Restaurant } from "./restaurant";
 import { RestaurantMenu } from "./restaurant_menu";
 import { RestaurantPhoto } from "./restaurant_photo";
 import { CustomerRole } from "./customer_role_restaurant";
+import { Order } from "./order";
+import { Favorite } from "./customer_favorite";
 
 /* 
     RESTAURANT 
@@ -53,7 +54,15 @@ Restaurant.belongsToMany(City, {
   through: CityRestaurant,
   foreignKey: "restaurant_id",
 });
-
+CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
+CustomerRole.belongsTo(Customer, { foreignKey: "customer_id" });
+Restaurant.hasMany(Order, {
+  foreignKey: "restaurant_id",
+});
+Restaurant.belongsToMany(Customer, {
+  through: Favorite,
+  foreignKey: "restaurant_id",
+});
 /*
   RESTAURANT_MENU
   */
@@ -71,16 +80,19 @@ RestaurantPhoto.belongsTo(Restaurant, {
 /*
     CUSTOMER
 */
+Customer.hasMany(Order, { foreignKey: "customer_id" });
+Order.belongsTo(Customer, {
+  foreignKey: "customer_id",
+});
+/*
+CUSTOMER_ROLE
+*/
+
 Customer.belongsToMany(Restaurant, {
   through: CustomerRole,
   foreignKey: "customer_id",
   constraints: false,
 });
-
-/*
-CUSTOMER_ROLE
-*/
-
 /*
   CITY
 */
@@ -92,7 +104,8 @@ City.belongsToMany(Restaurant, {
 /*
   CUSTOMER_FAVORITE 
   */
-CustomerFavorite.belongsTo(Customer, {
+Customer.belongsToMany(Restaurant, {
+  through: Favorite,
   foreignKey: "customer_id",
 });
 
@@ -118,4 +131,11 @@ Dishes.belongsToMany(Restaurant, {
 FrameAmbience.belongsToMany(Restaurant, {
   through: FrameAmbienceRestaurant,
   foreignKey: "frame_ambience_id",
+});
+
+/*
+  ORDER
+  */
+Order.belongsTo(Restaurant, {
+  foreignKey: "restaurant_id",
 });

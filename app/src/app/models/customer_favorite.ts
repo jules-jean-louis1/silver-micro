@@ -2,8 +2,8 @@ import { DataTypes } from "sequelize";
 import sequelize from "../api/config";
 import { Customer } from "./customer";
 
-export const CustomerFavorite = sequelize.define(
-  "customer_favorite",
+export const Favorite = sequelize.define(
+  "favorite",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -15,6 +15,14 @@ export const CustomerFavorite = sequelize.define(
       allowNull: false,
       references: {
         model: Customer,
+        key: "id",
+      },
+    },
+    restaurant_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "restaurant",
         key: "id",
       },
     },

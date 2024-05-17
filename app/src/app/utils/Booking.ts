@@ -5,3 +5,10 @@ export function formatDateWithoutUTCConversion(date: any): string {
     "0" + date.getMinutes()
   ).slice(-2)}:${("0" + date.getSeconds()).slice(-2)}.000Z`;
 }
+
+export const bookingStatus = [
+  { id: "pending", name: "En attente" },
+  { id: "confirmed", name: "Confirmé" },
+  { id: "cancelled", name: "Annulé" },
+  { id: "completed", name: "Terminé" },
+];

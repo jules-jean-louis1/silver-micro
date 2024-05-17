@@ -3,13 +3,14 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import ClientSessionProvider from "./context/ClientSessionProvider";
 import { Header } from "./components/shared/Header";
-import { Inter as FontSans } from "next/font/google"
+import { Poppins as FontSans } from "next/font/google"
 
 import { cn } from "@/lib/utils"
  
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: "400"
 })
 
 export const metadata: Metadata = {
