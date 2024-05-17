@@ -15,17 +15,23 @@ import { Salad } from "lucide-react";
 export const Autocomplete: React.FC = () => {
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
+  const [autocompleteResults, setAutocompleteResults] = useState([]);
 
   const [selectedCity, setSelectedCity] = useState<any>("");
-  const [resultSearch, setResultSearch] = useState<any>([]);
 
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
-  };
+    setAutocompleteResults([]);
+  }
 
-  const handleCity = (e: any) => {
-    setSelectedCity(e.target.value);
-  };
+  const handleCity = (value: string) => {
+    setSelectedCity(value);
+  }
+
+  const handleRestaurantClick = (e: any) => {
+    setSearch("");
+    setAutocompleteResults([]);
+  }
 
   useEffect(() => {
     (async () => {
@@ -34,20 +40,13 @@ export const Autocomplete: React.FC = () => {
       setCities(data);
     })();
   }, []);
-
+  
   useEffect(() => {
     if (search === "") return;
-    console.log(selectedCity);
-    console.log(search);
     (async () => {
-      const resp = await fetch(
-        `/api/restaurant/search?city=${selectedCity}&restaurant_name=${search}`
-      );
-      const data = await resp.json();
-      console.log(data);
-      if (data.length > 0) {
-        setResultSearch(data);
-      }
+        const resp = await fetch(`/api/restaurant/search?city=${selectedCity}&restaurant_name=${search}`);
+        const data = await resp.json();
+        setAutocompleteResults(data);
     })();
   }, [search]);
 
@@ -55,14 +54,14 @@ export const Autocomplete: React.FC = () => {
     <>
       <div className="rounded-lg border border-wheat">
         <div className="flex items-center">
-          <Select onValueChange={(e) => handleCity(e)}>
+          <Select onValueChange={handleCity}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Ville" />
             </SelectTrigger>
             <SelectContent>
               {cities.map((city: City) => {
                 return (
-                  <SelectItem value={String(city.id)} key={city.id}>
+                  <SelectItem value={String(city.name)} key={city.id}>
                     {city.name}
                   </SelectItem>
                 );
@@ -80,7 +79,7 @@ export const Autocomplete: React.FC = () => {
                 Rechercher
               </Button>
             </div>
-            {resultSearch.length > 0 && search.length > 0 && (
+            {autocompleteResults.length > 0 && search.length > 0 && (
               <div className="absolute w-full bg-flora-white rounded-b-lg shadow-lg border-wheat">
                 <div className="bg-ecalyptus-green rounded-lg p-2">
                   <Link href={"/restaurants"} className="flex items-center space-x-3">
@@ -88,7 +87,7 @@ export const Autocomplete: React.FC = () => {
                     <h4>Retrouvez tous les restaurants</h4>
                   </Link>
                 </div>
-                {resultSearch.map((restaurant: any) => {
+                {autocompleteResults.map((restaurant: any) => {
                   return (
                     <>
                       <div
@@ -101,7 +100,7 @@ export const Autocomplete: React.FC = () => {
                         >
                           <h4 className="font-semibold">{restaurant.name}</h4>
                           <p className="font-normal text-sm text-dark-black">
-                            {resultSearch.address}
+                            {restaurant.address}
                           </p>
                         </Link>
                       </div>
