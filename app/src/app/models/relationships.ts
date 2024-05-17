@@ -55,6 +55,7 @@ Restaurant.belongsToMany(City, {
   foreignKey: "restaurant_id",
 });
 CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
+CustomerRole.belongsTo(Customer, { foreignKey: "customer_id" });
 Restaurant.hasMany(Order, {
   foreignKey: "restaurant_id",
 });

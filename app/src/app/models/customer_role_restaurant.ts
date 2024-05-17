@@ -30,5 +30,6 @@ export const CustomerRole = sequelize.define(
   {
     timestamps: false,
     tableName: "customer_role_restaurant",
+    underscored: true,
   }
 );

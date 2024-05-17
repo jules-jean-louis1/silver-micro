@@ -30,7 +30,6 @@ export const AdminRestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [clickedEdit, setClickedEdit] = useState(false);
   const [city, setCity] = useState([]);
-
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -79,7 +78,7 @@ export const AdminRestaurantList = () => {
       setCity(resp_city);
     })();
   }, [clickedEdit]);
-
+  console.log(restaurants);
   return (
     <div>
       <section className="w-full h-full">
@@ -96,7 +95,7 @@ export const AdminRestaurantList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {restaurants.map((restaurant: Restaurant) => (
+            {restaurants.length > 0 && restaurants.map((restaurant: Restaurant) => (
               <TableRow key={restaurant?.id}>
                 <TableCell>{restaurant.id}</TableCell>
                 <TableCell>{restaurant.name}</TableCell>

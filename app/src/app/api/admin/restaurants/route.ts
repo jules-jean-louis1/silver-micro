@@ -1,10 +1,10 @@
+import "@/app/models/relationships";
+import sequelize from "@/app/api/config";
+import { authOptions } from "../../auth/[...nextauth]/route";
 import { CustomerRole } from "@/app/models/customer_role_restaurant";
 import { Restaurant } from "@/app/models/restaurant";
 import { NextResponse } from "next/server";
-import "@/app/models/relationships";
-import sequelize from "@/app/api/config";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { RestaurantMenu } from "@/app/models/restaurant_menu";
 import { CookingType } from "@/app/models/cooking_type";
 import { FrameAmbience } from "@/app/models/frame_ambience";
@@ -29,37 +29,58 @@ export async function GET(req: any) {
     const result = await sequelize.transaction(async (t: any) => {
       const userRestaurants = await CustomerRole.findAll({
         where: { customer_id: userId },
-        include: [
-          {
-            model: Restaurant,
-          },
-        ],
         transaction: t,
       });
+      console.log(userRestaurants);
       if (userRestaurants.length === 0) {
-        throw new Error("No restaurants found for this user");
+        return NextResponse.json(
+          { error: "No restaurants found" },
+          { status: 404 }
+        );
       }
-      const restaurant_ids = userRestaurants.map(
-        (restaurant: any) => restaurant.restaurant_id
-      );
-      const restaurant = await Restaurant.findAll({
-        where: {
-          id: restaurant_ids,
-        },
-        include: [
-          RestaurantMenu,
-          {
-            model: CookingType,
-            attributes: ["id", "name"],
-            through: { attributes: [] },
+      if (
+        userRestaurants.find(
+          (restaurant: any) => restaurant.dataValues.role === "superadmin"
+        )
+      ) {
+        const restaurant = await Restaurant.findAll({
+          include: [
+            RestaurantMenu,
+            {
+              model: CookingType,
+              attributes: ["id", "name"],
+              through: { attributes: [] },
+            },
+            FrameAmbience,
+            Dishes,
+            City,
+          ],
+          transaction: t,
+        });
+        return restaurant;
+      } else {
+        const restaurant_ids = userRestaurants.map(
+          (restaurant: any) => restaurant.restaurant_id
+        );
+        const restaurant = await Restaurant.findAll({
+          where: {
+            id: restaurant_ids,
           },
-          FrameAmbience,
-          Dishes,
-          City,
-        ],
-        transaction: t,
-      });
-      return restaurant;
+          include: [
+            RestaurantMenu,
+            {
+              model: CookingType,
+              attributes: ["id", "name"],
+              through: { attributes: [] },
+            },
+            FrameAmbience,
+            Dishes,
+            City,
+          ],
+          transaction: t,
+        });
+        return restaurant;
+      }
     });
     return NextResponse.json(result);
   } catch (error) {
