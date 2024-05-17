@@ -58,7 +58,7 @@ const config = {
         "ecalyptus-green": "#D1E2C0",
         'wheat': "#C8D7BF",
         "lemon-yellow": "#FAFF7D",
-        "black-100": "#25282B",
+        "dark-black": "#25282B",
         "light-gray": "#545A68",
       },
       borderRadius: {
