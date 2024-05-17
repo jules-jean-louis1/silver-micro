@@ -17,11 +17,20 @@ import { Favorite } from "./customer_favorite";
 /* 
     RESTAURANT 
 */
+Customer.belongsToMany(Restaurant, {
+  through: CustomerRole,
+  foreignKey: "customer_id",
+  constraints: false,
+});
 Restaurant.belongsToMany(Customer, {
   through: CustomerRole,
   foreignKey: "restaurant_id",
   constraints: false,
 });
+CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
+CustomerRole.belongsTo(Customer, { foreignKey: "customer_id" });
+Customer.hasMany(CustomerRole, { foreignKey: 'customer_id' });
+Restaurant.hasMany(CustomerRole, { foreignKey: 'restaurant_id' });
 
 Restaurant.belongsToMany(Dishes, {
   through: DishesRestaurant,
@@ -54,8 +63,7 @@ Restaurant.belongsToMany(City, {
   through: CityRestaurant,
   foreignKey: "restaurant_id",
 });
-CustomerRole.belongsTo(Restaurant, { foreignKey: "restaurant_id" });
-CustomerRole.belongsTo(Customer, { foreignKey: "customer_id" });
+
 Restaurant.hasMany(Order, {
   foreignKey: "restaurant_id",
 });
@@ -88,11 +96,7 @@ Order.belongsTo(Customer, {
 CUSTOMER_ROLE
 */
 
-Customer.belongsToMany(Restaurant, {
-  through: CustomerRole,
-  foreignKey: "customer_id",
-  constraints: false,
-});
+
 /*
   CITY
 */

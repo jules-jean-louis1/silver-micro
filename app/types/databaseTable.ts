@@ -81,3 +81,22 @@ export type CustomerRole = {
   customer_id: number;
   restaurant_id: number | null;
 };
+
+export type CustomerRoleRestaurant = {
+  customer_id: number;
+  restaurant_id: number;
+  role: string;
+  restaurant: Restaurant;
+};
+
+export type Customer = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  password: string;
+  avatar: string | null;
+  created_at: string;
+  updated_at: string | null;
+  customer_role_restaurants: CustomerRoleRestaurant[];
+};
