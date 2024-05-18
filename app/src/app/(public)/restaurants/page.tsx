@@ -29,16 +29,16 @@ function RestaurantsPage() {
 
   return (
     <>
-      <div className="grid grid-cols-[auto,1fr] gap-4 bg-flora-white px-52 pt-20">
+      <div className="grid grid-cols-[auto,1fr] gap-4 bg-flora-white px-52 pt-12">
         <section>
           <FiltersRestaurants
             selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
           />
         </section>
-        <section className="w-full">
+        <section className="w-full overflow-y-auto flex-auto h-[calc(100vh-104px)]">
           {restaurants.length > 0 ? (
-            <div className="flex flex-wrap m-2">
+            <div className="flex flex-wrap gap-4 m-2">
               {restaurants.map((restaurant: any) => {
                 return <RestaurantCard restaurants={restaurant} />;
               })}

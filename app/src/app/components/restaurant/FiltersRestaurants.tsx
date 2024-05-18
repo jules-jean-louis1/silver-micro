@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { City } from "../../../../types/databaseTable";
+import { SlidersHorizontal } from "lucide-react";
 
 interface FiltersRestaurantsProps {
   selectedFilters: any;
@@ -63,11 +64,15 @@ export const FiltersRestaurants: FC<FiltersRestaurantsProps> = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col space-y-3 lg:min-w-72 border px-2 py-3 border-wheat rounded-lg">
+      <div className="flex items-center">
+        <SlidersHorizontal />
+        <p className="text-center">Filtres</p>
+      </div>
       <Select
         onValueChange={(value: string) => handleChangeFilter(value, "city")}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Ville" />
         </SelectTrigger>
         <SelectContent>
@@ -80,8 +85,12 @@ export const FiltersRestaurants: FC<FiltersRestaurantsProps> = ({
           })}
         </SelectContent>
       </Select>
-      <Select onValueChange={(value: string) => handleChangeFilter(value, "frameAmbiance")}>
-        <SelectTrigger className="w-[180px]">
+      <Select
+        onValueChange={(value: string) =>
+          handleChangeFilter(value, "frameAmbiance")
+        }
+      >
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Cadre et ambiance" />
         </SelectTrigger>
         <SelectContent>
@@ -97,8 +106,10 @@ export const FiltersRestaurants: FC<FiltersRestaurantsProps> = ({
           })}
         </SelectContent>
       </Select>
-      <Select onValueChange={(value: string) => handleChangeFilter(value, "dish")}>
-        <SelectTrigger className="w-[180px]">
+      <Select
+        onValueChange={(value: string) => handleChangeFilter(value, "dish")}
+      >
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Plats" />
         </SelectTrigger>
         <SelectContent>
@@ -111,8 +122,12 @@ export const FiltersRestaurants: FC<FiltersRestaurantsProps> = ({
           })}
         </SelectContent>
       </Select>
-      <Select onValueChange={(value: string) => handleChangeFilter(value, "cookingType")}>
-        <SelectTrigger className="w-[180px]">
+      <Select
+        onValueChange={(value: string) =>
+          handleChangeFilter(value, "cookingType")
+        }
+      >
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Type de cuisine" />
         </SelectTrigger>
         <SelectContent>
@@ -125,6 +140,24 @@ export const FiltersRestaurants: FC<FiltersRestaurantsProps> = ({
           })}
         </SelectContent>
       </Select>
+      {(selectedFilters.city ||
+        selectedFilters.frameAmbiance ||
+        selectedFilters.dish ||
+        selectedFilters.cookingType) && (
+        <button
+          onClick={() =>
+            setSelectedFilters({
+              city: "",
+              frameAmbiance: "",
+              dish: "",
+              cookingType: "",
+            })
+          }
+          className="bg-wheat text-white p-2 rounded-lg w-full"
+        >
+          Réinitialiser les filtres
+        </button>
+      )}
     </div>
   );
 };

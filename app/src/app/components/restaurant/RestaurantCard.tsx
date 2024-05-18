@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "lucide-react";
 import { FC } from "react";
 
 interface RestaurantCardProps {
@@ -7,7 +8,7 @@ interface RestaurantCardProps {
 export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurants }) => {
   console.log(restaurants);
   return (
-    <article className="lg:w-1/2 lg:min-h-[200px] p-3 flex border-green-olive rounded-lg shadow-md space-x-4">
+    <article className="lg:w-[48%] lg:min-h-[200px] p-3 flex border border-green-olive rounded-lg shadow-md space-x-4">
       <div className="h-full w-1/3 bg-slate-500"></div>
       <div className="flex flex-col justify-between w-full items-start">
         <p>
@@ -29,8 +30,11 @@ export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurants }) => {
             : ""}
         </p>
         <div className="flex justify-center">
-          <Button size="sm" className="bg-green-olive text-flora-white min-w-28">
-            Réserver
+          <Button
+            size="sm"
+            className="bg-green-olive text-flora-white min-w-28"
+          >
+            <Link href={`/restaurant/${restaurants.id}`}>Réserver</Link>
           </Button>
         </div>
       </div>
