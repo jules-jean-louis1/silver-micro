@@ -29,7 +29,7 @@ function RestaurantsPage() {
 
   return (
     <>
-      <div className="grid grid-cols-[auto,1fr] gap-4 bg-flora-white px-52 pt-12">
+      <div className="grid grid-cols-[auto,1fr] gap-4 bg-flora-white 2xl:px-52 xl:px-12 pt-12">
         <section>
           <FiltersRestaurants
             selectedFilters={selectedFilters}

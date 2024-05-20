@@ -28,7 +28,7 @@ export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurants }) => {
         <div className="flex justify-center">
           <Button
             size="sm"
-            className="flex items-center space-x-3 bg-green-olive text-flora-white hover:bg-ecalyptus-green lg:min-w-40 font-medium"
+            className="flex items-center space-x-3 bg-sunshine-yellow text-midnight-black hover:bg-ecalyptus-green lg:min-w-40 font-medium"
           >
             <Link href={`/restaurant/${restaurants.id}`}>Réserver</Link>
             <MoveRight />

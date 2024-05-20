@@ -137,7 +137,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   }, [clickedConfim]);
 
   return (
-    <div className="lg:max-h-[10rem] lg:min-h-[10rem] lg:min-w-[6rem]">
+    <div className="h-fit py-3 px-2 border border-skyline-border bg-ghost-white rounded-lg">
       <ProgressBarBooking activeStep={activeStep} />
       <div>
         <div className="flex justify-between items-center">
@@ -178,8 +178,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           />
         )}
         {isStepActive("confirm") && (
-          <div>
-            <h1>Confirmation</h1>
+          <div className="flex flex-col space-y-3 pt-6">
+            <h1 className="flex justify-center">Confirmation</h1>
             <p>
               Date:{" "}
               {format(selectedDay ?? new Date(), "EEEE d MMMM yyyy", {

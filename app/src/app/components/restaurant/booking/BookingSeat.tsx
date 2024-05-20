@@ -19,7 +19,7 @@ export const BookingSeat: FC<BookingSeatProps> = (props) => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-4 pt-6">
       {displaySeats().map((seat, index) => (
         <Button
           key={index}
