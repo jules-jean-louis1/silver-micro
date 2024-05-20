@@ -57,3 +57,27 @@ export const canManageRestaurant = (session: AppSession, restaurantId: number) =
       (role.role === USER_ROLE.MANAGER && role.restaurant_id === restaurantId)
   );
 }
+
+export const canMangeUser = (session : AppSession, restaurant_id: number) => {
+  if (!session || !session.roles) {
+    return false;
+  }
+  if (session.roles.some((role) => role.role === USER_ROLE.SUPER_ADMIN)) {
+    return true;
+  }
+  return session.roles.some(
+    (role) =>
+      role.role === USER_ROLE.ADMIN && role.restaurant_id === restaurant_id
+  );
+}
+
+export const canManageInAdmin = (session : AppSession) => {
+  if (!session || !session.roles) {
+    return false;
+  }
+  return session.roles.some(
+    (role) =>
+      role.role === USER_ROLE.SUPER_ADMIN ||
+      role.role === USER_ROLE.ADMIN
+  );
+}
