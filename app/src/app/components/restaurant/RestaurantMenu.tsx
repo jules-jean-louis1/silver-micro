@@ -16,7 +16,7 @@ export const RestaurantMenu: FC<RestaurantMenuProps> = (props) => {
   return (
     <>
       <section className="flex flex-col pb-4">
-        <div>
+        <div className="flex justify-between items-center">
           <h4 className="flex space-x-1 text-sm">
             <span>
               {restaurant.cooking_types?.length > 0
@@ -30,10 +30,10 @@ export const RestaurantMenu: FC<RestaurantMenuProps> = (props) => {
                 : "N/A"}
             </span>
           </h4>
+          <ManageFavorites restaurant={restaurant} />
         </div>
         <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">{restaurant?.name}</h1>
-        <ManageFavorites restaurant={restaurant} />
+          <h1 className="text-2xl font-semibold">{restaurant?.name}</h1>
         </div>
       </section>
       <section className="flex flex-col space-y-2">
@@ -67,12 +67,17 @@ export const RestaurantMenu: FC<RestaurantMenuProps> = (props) => {
               <h3 className="text-lg">Menu</h3>
               {restaurant?.restaurant_menus?.map((menu: any) => {
                 return (
-                  <div className="flex justify-between">
+                  <div className="flex justify-between py-2">
                     <div>
                       <h4>{menu?.name}</h4>
-                      <p>{menu?.description ? menu?.description : "N/A"}</p>
+                      <p className="text-sm text-skyline-border">
+                        {menu?.description ? menu?.description : "N/A"}
+                      </p>
                     </div>
-                    <div>{menu?.price} €</div>
+                    <div className="flex space-x-1">
+                      <span>{menu?.price}</span>
+                      <span>€</span>
+                    </div>
                   </div>
                 );
               })}
