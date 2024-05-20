@@ -10,7 +10,7 @@ export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurants }) => {
 
   return (
     <article className="lg:w-[48%] lg:min-h-[200px] p-3 flex border border-green-olive rounded-lg shadow-md space-x-4">
-      <div className="h-full w-1/3 bg-slate-500"></div>
+      <div className="h-full w-1/3 bg-whisper-white rounded-lg"></div>
       <div className="flex flex-col justify-between w-full items-start">
         <p>
           {restaurants.frame_ambiences?.length > 0
