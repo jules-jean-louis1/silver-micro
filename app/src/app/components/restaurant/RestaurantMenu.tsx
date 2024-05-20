@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carrot, Dot, MapPin } from "lucide-react";
 import { FC } from "react";
 import { ManageFavorites } from "../favorites/ManageFavorites";
+import { ReviewRestaurant } from "../review/ReviewRestaurant";
 
 type RestaurantMenuProps = {
   restaurant: any;
@@ -84,15 +85,7 @@ export const RestaurantMenu: FC<RestaurantMenuProps> = (props) => {
             </div>
           </TabsContent>
           <TabsContent value="password">
-            {restaurant?.review ? (
-              <></>
-            ) : (
-              <>
-                <div>
-                  <p>Aucun avis pour ce restaurant</p>
-                </div>
-              </>
-            )}
+            <ReviewRestaurant />
           </TabsContent>
         </Tabs>
       </section>
