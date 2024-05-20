@@ -137,6 +137,21 @@ export const AdminUserRole: FC<AdminUserRoleProps> = ({ user }) => {
   const addNewRoleButton = () => {
     setNewRoles((prevRoles: any) => [...prevRoles, {}]);
   };
+
+  const removeRole = async (restaurantId: any) => {
+    const resp = await fetch("/api/admin/customer/" + user_id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        restaurant_id: restaurantId,
+      }),
+    });
+    const resp_json = await resp.json();
+    console.log(resp_json);
+  };
+
   useEffect(() => {
     (async () => {
       const resp = await fetch(
@@ -146,7 +161,7 @@ export const AdminUserRole: FC<AdminUserRoleProps> = ({ user }) => {
       setRestaurantView(resp_restaurant);
     })();
   }, []);
-  console.log(role)
+
   return (
     <Dialog>
       <DialogTrigger>Rôle</DialogTrigger>
@@ -224,9 +239,7 @@ export const AdminUserRole: FC<AdminUserRoleProps> = ({ user }) => {
               className="flex flex-col"
               key={index}
               method="post"
-              onSubmit={(e) =>
-                handleAddNewRole(restaurant_id, newRole, e)
-              }
+              onSubmit={(e) => handleAddNewRole(restaurant_id, newRole, e)}
             >
               <div className="flex items-center space-x-3">
                 <Select onValueChange={(value) => setRestaurantId(value)}>
@@ -253,7 +266,11 @@ export const AdminUserRole: FC<AdminUserRoleProps> = ({ user }) => {
               </div>
               <div className="flex items-center space-x-2 justify-end">
                 <Button type="submit">Ajouter</Button>
-                <Button type="button" variant="destructive">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => removeRole(restaurant_id)}
+                >
                   Supprimer
                 </Button>
               </div>

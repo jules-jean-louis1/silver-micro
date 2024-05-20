@@ -22,10 +22,13 @@ import { Customer } from "../../../../../types/databaseTable";
 import { AdminUserEdit } from "./AdminUserEdit";
 import { Ellipsis } from "lucide-react";
 import { AdminUserRole } from "./AdminUserRole";
+import { useSessionContext } from "@/app/utils/useSessionContext";
 
 export const AdminUserList = () => {
   const [users, setUsers] = useState([]);
   const { data } = useSession();
+  const sessionCtx = useSessionContext();
+  const canManageUser = sessionCtx.canManageInAdmin();
 
   useEffect(() => {
     (async () => {
@@ -38,6 +41,7 @@ export const AdminUserList = () => {
       setUsers(resp_users);
     })();
   }, []);
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <Table>
@@ -69,28 +73,30 @@ export const AdminUserList = () => {
                     )
                   )}
                 </TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <Ellipsis />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>Action</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onSelect={(event) => event.preventDefault()}
-                      >
-                        <AdminUserRole user={user} />
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={(event) => event.preventDefault()}
-                      >
-                        <AdminUserEdit user={user} />
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>Supprimer</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+                {canManageUser && (
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <Ellipsis />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>Action</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onSelect={(event) => event.preventDefault()}
+                        >
+                          <AdminUserRole user={user} />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={(event) => event.preventDefault()}
+                        >
+                          <AdminUserEdit user={user} />
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Supprimer</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
         </TableBody>

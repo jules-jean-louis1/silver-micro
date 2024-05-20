@@ -31,7 +31,7 @@ export async function PUT(req: any, { params }: any) {
   const { id } = params;
   const body = await req.json();
   const session = await getServerSession(authOptions);
-  const isAuthorized = canMangeUser(session!, body.restaurant_id); // Add '!' to assert that session is not null
+  const isAuthorized = canMangeUser(session!, body.restaurant_id);
 
   if (!isAuthorized) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -47,4 +47,25 @@ export async function PUT(req: any, { params }: any) {
   }
 
   return NextResponse.json({ success: "Update User role" }, { status: 200 });
+}
+
+export async function DELETE(req: any, { params }: any) {
+  const { id } = params;
+  const body = await req.json();
+  const session = await getServerSession(authOptions);
+  const isAuthorized = canMangeUser(session!, body.restaurant_id); 
+
+  if (!isAuthorized) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const customer = await CustomerRole.destroy({
+    where: { customer_id: id, restaurant_id: body.restaurant_id },
+  });
+
+  if (!customer) {
+    return NextResponse.json({ error: "Customer not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ success: "Delete User role" }, { status: 200 });
 }

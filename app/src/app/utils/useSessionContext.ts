@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { canAccessAdminInterface, canManageRestaurant, getIsSuperAdmin } from "./user";
+import { canAccessAdminInterface, canManageInAdmin, canManageRestaurant, getIsSuperAdmin } from "./user";
 import { AppSession } from "./AppSession";
 
 export const useSessionContext = () => {
@@ -11,6 +11,6 @@ export const useSessionContext = () => {
     getIsSuperAdmin: () => getIsSuperAdmin(sessionData),
     canAccessAdminInterface: () => canAccessAdminInterface(sessionData),
     canManageRestaurant: (restaurantId: number) => canManageRestaurant(sessionData, restaurantId),
-    canManageInAdmin: () => canAccessAdminInterface(sessionData),
+    canManageInAdmin: () => canManageInAdmin(sessionData),
   };
 };
