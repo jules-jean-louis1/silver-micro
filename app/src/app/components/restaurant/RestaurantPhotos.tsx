@@ -11,9 +11,13 @@ export const RestaurantPhotos = () => {
     }, []);
 
     return (
-        <section className="w-full h-[calc(100vh-56px)] bg-flora-white">
-        <div className="flex justify-center items-center h-full">
-            <h2 className="text-3xl text-green-olive">Photos du restaurant</h2>
+        <section className="w-full h-[calc(100vh-72px)] bg-flora-white">
+        <div className="flex flex-col justify-start h-full">
+            <div className="bg-whisper-white rounded-lg h-[700px] w-full"></div>
+            <div className="flex space-x-2 w-full pt-3">
+                <div className="w-1/2 bg-whisper-white h-52 rounded-lg"></div>
+                <div className="w-1/2 bg-whisper-white h-52 rounded-lg"></div>
+            </div>
         </div>
         </section>
     );

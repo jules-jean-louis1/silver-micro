@@ -3,13 +3,19 @@ import "./globals.css";
 import { getServerSession } from "next-auth";
 import ClientSessionProvider from "./context/ClientSessionProvider";
 import { Header } from "./components/shared/Header";
-import { Poppins as FontSans } from "next/font/google"
+import { Poppins as FontSans, DM_Serif_Display as FontSerif } from "next/font/google"
 
 import { cn } from "@/lib/utils"
  
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: "400"
+})
+
+const fontSerif = FontSerif({
+  subsets: ["latin"],
+  variable: "--font-serif",
   weight: "400"
 })
 
@@ -29,7 +35,8 @@ export default async function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
+          fontSerif.variable
         )}
       >
         <ClientSessionProvider session={session}>

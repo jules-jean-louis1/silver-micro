@@ -19,7 +19,6 @@ export async function GET(req: any, { params }: any) {
         restaurant_id: restaurantId,
       },
     });
-    console.log(favorite);
     if (!favorite) {
       return NextResponse.json(
         { error: "Favorite not found" },
@@ -43,7 +42,7 @@ export async function DELETE(req: any, { params }: any) {
   }
   const session = await getServerSession(authOptions);
 
-  if (session?.user.id !== userId) {
+  if (session?.user.id !== parseInt(userId)) {
     return NextResponse.json(
       { error: "User ID does not match session user ID" },
       { status: 403 }
@@ -52,7 +51,7 @@ export async function DELETE(req: any, { params }: any) {
   try {
     const favorite = await Favorite.findOne({
       where: {
-        customer_if: userId,
+        customer_id: userId,
         restaurant_id: restaurantId,
       },
     });
@@ -60,7 +59,7 @@ export async function DELETE(req: any, { params }: any) {
     if (!favorite) {
       return NextResponse.json(
         { error: "Favorite not found" },
-        { status: 404 }
+        { status: 200 }
       );
     }
 
@@ -82,7 +81,7 @@ export async function POST(req: any, { params }: any) {
   }
   const session = await getServerSession(authOptions);
 
-  if (session?.user.id !== userId) {
+  if (session?.user.id !== parseInt(userId)) {
     return NextResponse.json(
       { error: "User ID does not match session user ID" },
       { status: 403 }
@@ -94,7 +93,13 @@ export async function POST(req: any, { params }: any) {
       restaurant_id: restaurantId,
       created_at: new Date(),
     });
-    return NextResponse.json(favorite);
+    if (!favorite) {
+      return NextResponse.json(
+        { error: "An error occurred" },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });

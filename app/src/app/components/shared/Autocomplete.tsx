@@ -53,10 +53,10 @@ export const Autocomplete: React.FC = () => {
 
   return (
     <>
-      <div className="rounded-lg border border-wheat">
+      <div className="rounded-lg bg-whisper-white border border-skyline-border px-0.5">
         <div className="flex items-center">
           <Select onValueChange={(e) => handleCity(e)}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[230px] bg-whisper-white">
               <SelectValue placeholder="Ville" />
             </SelectTrigger>
             <SelectContent>
@@ -70,20 +70,20 @@ export const Autocomplete: React.FC = () => {
             </SelectContent>
           </Select>
           <div className="relative">
-            <div className="flex items-center bg-flora-white rounded-r-lg p-0.5">
+            <div className="flex items-center bg-whisper-white rounded-r-lg p-0.5">
               <Input
                 placeholder="Rechercher un restaurant"
                 onChange={(e) => handleSearch(e)}
-                className="bg-flora-white border-transparent"
+                className="bg-whisper-white border-transparent"
               />
-              <Button size="sm" className="bg-green-olive text-flora-white">
+              <Button size="sm" className="bg-sunshine-yellow text-midnight-black font-semibold">
                 Rechercher
               </Button>
             </div>
             {resultSearch.length > 0 && search.length > 0 && (
-              <div className="absolute w-full bg-flora-white rounded-b-lg shadow-lg border-wheat">
+              <div className="absolute w-full bg-flora-white rounded-b-lg shadow-lg">
                 <div className="bg-ecalyptus-green rounded-lg p-2">
-                  <Link href={"/restaurants"} className="flex items-center space-x-3">
+                  <Link href={"/restaurants"} className="flex ,items-center space-x-3">
                     <Salad />
                     <h4>Retrouvez tous les restaurants</h4>
                   </Link>
@@ -93,7 +93,7 @@ export const Autocomplete: React.FC = () => {
                     <>
                       <div
                         key={restaurant.id}
-                        className="p-2 min-h-8 hover:bg-gray-200 text-dark-black"
+                        className="p-2 min-h-8 hover:bg-gray-200 text-midnight-black"
                       >
                         <Link
                           href={`/restaurant/${restaurant.id}`}

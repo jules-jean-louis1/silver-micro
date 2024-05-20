@@ -64,7 +64,7 @@ export const BookingHours: React.FC<BookingHoursProps> = (props) => {
   }, [selectedDay]);
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-4 gap-4 pt-6">
       {displayHours().map((hour, index) => (
         <Button
           key={index}

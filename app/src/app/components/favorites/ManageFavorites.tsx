@@ -70,8 +70,8 @@ export const ManageFavorites: FC<ManageFavoritesProps> = ({ restaurant }) => {
 
   return (
     <>
-      <Button onClick={() => setClicked(true)}>
-        {isFavorite ? <Heart color="red" /> : <Heart />}
+      <Button onClick={() => setClicked(true)} variant={"ghost"}>
+        {isFavorite ? <Heart color="black" fill="#FFCD00" /> : <Heart />}
       </Button>
     </>
   );

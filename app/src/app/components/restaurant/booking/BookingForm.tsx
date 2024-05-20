@@ -2,7 +2,7 @@ import { FC, use, useEffect, useState } from "react";
 import { Calendar } from "./Calendar";
 import { BookingHours } from "./BookingHours";
 import { BookingSeat } from "./BookingSeat";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
@@ -52,6 +52,9 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
   const [orderOfDay, setOrderOfDay] = useState<any>([]);
   const [clickedConfim, setClickedConfirm] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [successBooking, setSuccessBooking] = useState(false);
 
   const isStepActive = (stepName: StepName) => activeStep === stepName;
   const nextStep = () => {
@@ -131,13 +134,30 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           }),
         });
         const data = await response.json();
+        if (data.error) {
+          setErrorMsg(data.error);
+          return;
+        }
+        if (data.success) {
+          setSuccessMsg(data.success);
+          setSuccessBooking(true);
+        }
       })();
       setClickedConfirm(false);
     }
   }, [clickedConfim]);
 
+  useEffect(() => {
+    if (successBooking) {
+      setTimeout(() => {
+        setSuccessBooking(false);
+      }, 5000);
+      setActiveStep("date");
+    }
+  }, [successBooking]);
+  
   return (
-    <div className="lg:max-h-[10rem] lg:min-h-[10rem] lg:min-w-[6rem]">
+    <div className="h-fit py-3 px-2 border border-skyline-border bg-ghost-white rounded-lg">
       <ProgressBarBooking activeStep={activeStep} />
       <div>
         <div className="flex justify-between items-center">
@@ -178,26 +198,38 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           />
         )}
         {isStepActive("confirm") && (
-          <div>
-            <h1>Confirmation</h1>
-            <p>
-              Date:{" "}
-              {format(selectedDay ?? new Date(), "EEEE d MMMM yyyy", {
-                locale: fr,
-              })}
-            </p>
-            <p>Heure: {selectedHours}</p>
-            <p>Nombre de personnes: {selectedSeat}</p>
-            {data ? (
-              <Button onClick={() => setClickedConfirm(true)}>Confirmer</Button>
-            ) : (
-              <Button variant={"outline"}>
-                <Link href="/login">
-                  Connectez-vous pour confirmer votre réservation
-                </Link>
-              </Button>
+          <>
+            {successBooking && (
+              <div className="flex w-full justify-center items-center p-3 border border-sage-green rounded-l">
+                <p className="text-sage-green">
+                  Votre réservation a été effectuée avec succès
+                </p>
+              </div>
             )}
-          </div>
+            <div className="flex flex-col space-y-3 pt-6">
+              <h1 className="flex justify-center">Confirmation</h1>
+              <p>
+                Date:{" "}
+                {format(selectedDay ?? new Date(), "EEEE d MMMM yyyy", {
+                  locale: fr,
+                })}
+              </p>
+              <p>Heure: {selectedHours}</p>
+              <p>Nombre de personnes: {selectedSeat}</p>
+              {errorMsg && <p className="text-pomegranate">{errorMsg}</p>}
+              {data ? (
+                <Button onClick={() => setClickedConfirm(true)}>
+                  Confirmer
+                </Button>
+              ) : (
+                <Button variant={"outline"}>
+                  <Link href="/login">
+                    Connectez-vous pour confirmer votre réservation
+                  </Link>
+                </Button>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
