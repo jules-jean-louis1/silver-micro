@@ -6,6 +6,8 @@ import { Header } from "./components/shared/Header";
 import { Poppins as FontSans, DM_Serif_Display as FontSerif } from "next/font/google"
 
 import { cn } from "@/lib/utils"
+import Head from "next/head";
+import Link from "next/link";
  
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -32,6 +34,9 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html lang="fr">
+      <Head>
+        <Link href="../../public/shared/icon/logoTabs.svg" rel="icon" />
+      </Head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",

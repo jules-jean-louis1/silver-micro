@@ -56,7 +56,7 @@ export const Autocomplete: React.FC = () => {
       <div className="rounded-lg bg-whisper-white border border-skyline-border px-0.5">
         <div className="flex items-center">
           <Select onValueChange={(e) => handleCity(e)}>
-            <SelectTrigger className="w-[230px] bg-whisper-white">
+            <SelectTrigger className="w-[230px] bg-whisper-white focus:outline-none">
               <SelectValue placeholder="Ville" />
             </SelectTrigger>
             <SelectContent>
@@ -74,7 +74,7 @@ export const Autocomplete: React.FC = () => {
               <Input
                 placeholder="Rechercher un restaurant"
                 onChange={(e) => handleSearch(e)}
-                className="bg-whisper-white border-transparent"
+                className="bg-whisper-white border-transparent focus:outline-none"
               />
               <Button size="sm" className="bg-sunshine-yellow text-midnight-black font-semibold">
                 Rechercher
