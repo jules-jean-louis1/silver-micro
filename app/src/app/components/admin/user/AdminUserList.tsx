@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -18,14 +18,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Customer } from "../../../../../types/databaseTable";
 import { AdminUserEdit } from "./AdminUserEdit";
 import { Ellipsis } from "lucide-react";
 import { AdminUserRole } from "./AdminUserRole";
 import { useSessionContext } from "@/app/utils/useSessionContext";
 
+type Restaurant = {
+  id: number;
+  name: string;
+};
+
+type CustomerRoleRestaurant = {
+  customer_id: number;
+  restaurant_id: number;
+  role: string;
+  restaurant: Restaurant;
+};
+
+type User = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  avatar: string | null;
+  created_at: string;
+  customer_role_restaurants: CustomerRoleRestaurant[];
+};
+
 export const AdminUserList = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [clickedDelete, setClickedDelete] = useState<any>({
+    state: false,
+    userId: 0,
+  });
+  const [successDelete, setSuccessDelete] = useState(false);
   const { data } = useSession();
   const sessionCtx = useSessionContext();
   const canManageUser = sessionCtx.canManageInAdmin();
@@ -34,13 +60,57 @@ export const AdminUserList = () => {
     (async () => {
       const users = await fetch("/api/admin/customers/" + data?.user.id);
       const resp_users = await users.json();
+
       if (resp_users.error) {
         console.error(resp_users.error);
         return;
       }
       setUsers(resp_users);
+      setSuccessDelete(false);
     })();
-  }, []);
+  }, [successDelete]);
+
+  useEffect(() => {
+    if (!clickedDelete.state) {
+      return;
+    }
+    const user = users.find((user) => user.id === clickedDelete.userId);
+    let userRole = "user";
+
+    if (user) {
+      const superAdminRole = user.customer_role_restaurants.some(
+        (role) => role.role === "superadmin"
+      );
+
+      if (superAdminRole) {
+        userRole = "superadmin";
+      } else {
+        const adminRole = user.customer_role_restaurants.some(
+          (role) => role.role === "admin"
+        );
+
+        if (adminRole) {
+          userRole = "admin";
+        }
+      }
+    }
+    (async () => {
+      const resp = await fetch("/api/admin/customers/" + clickedDelete.userId, {
+        method: "DELETE",
+        body: JSON.stringify({
+          role: userRole,
+        }),
+      });
+      const resp_delete = await resp.json();
+      if (resp_delete.error) {
+        return;
+      }
+      if (resp_delete.success) {
+        setSuccessDelete(true);
+      }
+    })();
+    setClickedDelete({ state: false });
+  }, [clickedDelete]);
 
   return (
     <div className="w-full h-full flex justify-center items-center">
@@ -57,7 +127,7 @@ export const AdminUserList = () => {
         </TableHeader>
         <TableBody>
           {users.length > 0 &&
-            users.map((user: Customer) => (
+            users.map((user: User) => (
               <TableRow key={user?.id}>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.lastname}</TableCell>
@@ -92,7 +162,13 @@ export const AdminUserList = () => {
                         >
                           <AdminUserEdit user={user} />
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Supprimer</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            setClickedDelete({ state: true, userId: user.id })
+                          }
+                        >
+                          Supprimer
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
