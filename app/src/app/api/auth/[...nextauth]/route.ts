@@ -6,6 +6,7 @@ import { connectToDatabase } from "../../config";
 import { Customer } from "@/app/models/customer";
 import { CustomerRole } from "@/app/models/customer_role_restaurant";
 import "@/app/models/relationships";
+import { NextResponse } from "next/server";
 
 
 export const authOptions:NextAuthOptions = {
@@ -30,19 +31,19 @@ export const authOptions:NextAuthOptions = {
           await connectToDatabase();
       
           if (email === "" || password === "") {
-            throw new Error("Champs manquants");
+            return NextResponse.json({ error: "Veuillez remplir tous les champs." }, { status: 400 });
           }
 
           const customer = await Customer.findOne({ where: { email } });
 
           if (!customer) {
-            throw new Error("Utilisateur introuvable");
+            return NextResponse.json({ error: "Aucun compte trouvé" }, { status: 404 });
           }
       
           const passwordMatch = bcrypt.compareSync(password, customer.password);
       
           if (!passwordMatch) {
-            throw new Error("Mot de passe incorrect");
+            return NextResponse.json({ error: "Mot de passe incorrect" }, { status: 401 });
           }
 
           const roles = await CustomerRole.findAll({
@@ -50,7 +51,6 @@ export const authOptions:NextAuthOptions = {
             attributes: ["role", "restaurant_id"],
           });
 
-          console.log(roles);
           return { customer, roles };
         } catch (error) {
           console.error(error);
