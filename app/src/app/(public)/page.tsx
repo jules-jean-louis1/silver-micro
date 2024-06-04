@@ -18,11 +18,11 @@ function Home() {
   }, []);
   return (
     <>
-      <section className="pt-12">
-        <article className="lg:min-h-[420px] lg:min-w-screen rounded-[12px] bg-ghost-white lg:mx-28 flex justify-center items-center">
+      <section className="lg:pt-12">
+        <article className="min-h-[60vh] lg:min-h-[420px] lg:min-w-screen rounded-[12px] bg-ghost-white lg:mx-28 flex justify-center items-center">
           <div className="flex flex-col space-y-3">
-            <h1 className="text-5xl text-lemon-yellow serif">
-              Trouver le meilleur restaurant
+            <h1 className="text-center text-5xl text-lemon-yellow serif">
+              Découvrez et réserver le meilleur restaurant
             </h1>
             <Autocomplete />
             <div>
@@ -36,10 +36,10 @@ function Home() {
       <section className="pt-12">
         <article className="flex flex-col lg:min-h-[420px] lg:min-w-screen lg:mx-48">
           <div className="flex justify-between item-center">
-            <h2 className="text-3xl font-semibold">
+            <h2 className="text-center lg;text-left text-3xl font-semibold">
               Les restaurants les plus populaires
             </h2>
-            <Button type="button" variant={"ghost"}>
+            <Button type="button" variant={"ghost"} className="hidden lg:flex">
               <Link href="/restaurants">Voir tous les restaurants</Link>
             </Button>
           </div>

@@ -22,7 +22,7 @@ function RestaurantPage() {
 
   return (
     <>
-      <section className="w-screen h-[calc(100vh-56px)] grid grid-flow-row grid-cols-3 bg-flora-white pt-4 px-3 gap-2">
+      <section className="w-screen h-screen lg:h-[calc(100vh-56px)] pb-6 lg:pb-0 flex flex-col lg:grid lg:grid-flow-row lg:grid-cols-3 bg-flora-white pt-4 px-16 gap-10">
         <article>
           <RestaurantPhotos />
         </article>

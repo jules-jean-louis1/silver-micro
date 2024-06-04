@@ -30,14 +30,14 @@ export const Header = () => {
   };
 
   return (
-<header className="flex justify-between w-screen h-[64px] lg:p-2 border border-b-wheat bg-white relative">
+    <header className="flex justify-between w-screen h-[64px] lg:p-2 border border-b-wheat bg-white relative">
       <div className="flex items-center space-x-2 max-w-[30%] min-w-fit ml-2">
         <div>
           <Link href="/">
             <img src="/shared/icon/logoHeader.svg" alt="Logo-Miam" />
           </Link>
         </div>
-        <nav className="flex">
+        <nav className="lg:flex hidden">
           <ul className="flex items-center space-x-4">
             <li>
               <Link href="/restaurants">

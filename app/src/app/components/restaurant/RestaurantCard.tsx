@@ -7,9 +7,8 @@ interface RestaurantCardProps {
   restaurants: any;
 }
 export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurants }) => {
-
   return (
-    <article className="lg:w-[48%] lg:min-h-[200px] p-3 flex border border-green-olive rounded-lg shadow-md space-x-4">
+    <article className="w-full min-h-52 lg:w-[48%] lg:min-h-[200px] p-3 flex border border-green-olive rounded-lg shadow-md space-x-4">
       <div className="h-full w-1/3 bg-whisper-white rounded-lg"></div>
       <div className="flex flex-col justify-between w-full items-start">
         <p>
@@ -26,13 +25,15 @@ export const RestaurantCard: FC<RestaurantCardProps> = ({ restaurants }) => {
           {restaurants.cities?.length > 0 ? restaurants.cities[0].name : ""}
         </p>
         <div className="flex justify-center">
-          <Button
-            size="sm"
-            className="flex items-center space-x-3 bg-sunshine-yellow text-midnight-black hover:bg-ecalyptus-green lg:min-w-40 font-medium"
-          >
-            <Link href={`/restaurant/${restaurants.id}`}>Réserver</Link>
-            <MoveRight />
-          </Button>
+          <Link href={`/restaurant/${restaurants.id}`}>
+            <Button
+              size="sm"
+              className="flex items-center space-x-3 bg-sunshine-yellow text-midnight-black hover:bg-ecalyptus-green lg:min-w-40 font-medium"
+            >
+              Réserver
+              <MoveRight />
+            </Button>
+          </Link>
         </div>
       </div>
     </article>

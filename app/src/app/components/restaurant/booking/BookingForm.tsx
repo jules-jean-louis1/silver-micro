@@ -162,7 +162,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           </p>
         </div>
       )}
-      <div className="h-fit py-3 px-2 border border-skyline-border bg-ghost-white rounded-lg">
+      <div className="h-fit py-3 px-2 border border-skyline-border bg-[#F5F5F5] rounded-lg">
         <ProgressBarBooking activeStep={activeStep} />
         <div>
           <div className="flex justify-between items-center">
@@ -174,7 +174,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                 {steps.find((step) => step.name === activeStep)?.title}
               </h3>
             </div>
-            <Button onClick={nextStep} variant="outline" size="icon">
+            <Button onClick={nextStep} disabled variant="outline" size="icon">
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
