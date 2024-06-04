@@ -30,14 +30,14 @@ export const Header = () => {
   };
 
   return (
-    <header className="flex justify-between w-screen h-[64px] lg:p-2 border border-b-wheat bg-white">
+    <header className="flex justify-between w-screen h-[64px] lg:p-2 border border-b-wheat bg-white relative">
       <div className="flex items-center space-x-2 max-w-[30%] min-w-fit ml-2">
         <div>
           <Link href="/">
             <img src="/shared/icon/logoHeader.svg" alt="Logo-Miam" />
           </Link>
         </div>
-        <nav className="flex">
+        <nav className="lg:flex hidden">
           <ul className="flex items-center space-x-4">
             <li>
               <Link href="/restaurants">
@@ -52,7 +52,7 @@ export const Header = () => {
           </ul>
         </nav>
       </div>
-      <div className="flex justify-center w-full">
+      <div className="absolute left-1/2 -translate-x-1/2">
         {pathname !== "/" && <Autocomplete />}
       </div>
       <div className="max-w-[30%] mr-2">

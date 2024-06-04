@@ -1,7 +1,16 @@
 "use client";
 import { FiltersRestaurants } from "@/app/components/restaurant/FiltersRestaurants";
 import { RestaurantCard } from "@/app/components/restaurant/RestaurantCard";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 function RestaurantsPage() {
   const [restaurants, setRestaurants] = useState([]);
@@ -12,6 +21,7 @@ function RestaurantsPage() {
     dish: "",
     cookingType: "",
   });
+  const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
     (async () => {
@@ -29,13 +39,31 @@ function RestaurantsPage() {
 
   return (
     <>
-      <div className="grid grid-cols-[auto,1fr] gap-4 bg-flora-white 2xl:px-52 xl:px-12 pt-12">
-        <section>
-          <FiltersRestaurants
-            selectedFilters={selectedFilters}
-            setSelectedFilters={setSelectedFilters}
-          />
-        </section>
+      <div className="grid grid-flow-col lg:grid-cols-[auto,1fr] lg:gap-4 bg-flora-white 2xl:px-52 xl:px-12 pt-12">
+        {isMobile && (
+          <Dialog>
+            <DialogTrigger>Filtres</DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Filtres</DialogTitle>
+                <DialogDescription>
+                  <FiltersRestaurants
+                    selectedFilters={selectedFilters}
+                    setSelectedFilters={setSelectedFilters}
+                  />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        )}
+        {!isMobile && (
+          <section>
+            <FiltersRestaurants
+              selectedFilters={selectedFilters}
+              setSelectedFilters={setSelectedFilters}
+            />
+          </section>
+        )}
         <section className="w-full overflow-y-auto flex-auto h-[calc(100vh-104px)]">
           {restaurants.length > 0 ? (
             <div className="flex flex-wrap gap-4 m-2">

@@ -2,8 +2,11 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { LogIn } from "lucide-react";
 import { FloatingLabelInput } from "@/components/ui/FloatingInput";
+import { useState } from "react";
 
 export const LoginForm = () => {
+  const [error, setError] = useState<string | null>(null);
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);

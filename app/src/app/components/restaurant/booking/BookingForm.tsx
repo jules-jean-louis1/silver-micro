@@ -3,11 +3,11 @@ import { Calendar } from "./Calendar";
 import { BookingHours } from "./BookingHours";
 import { BookingSeat } from "./BookingSeat";
 import { format, set } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr, se } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { formatDateWithoutUTCConversion } from "@/app/utils/Booking";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleX } from "lucide-react";
 import { ProgressBarBooking } from "./ProgressBarBooking";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -53,7 +53,6 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   const [orderOfDay, setOrderOfDay] = useState<any>([]);
   const [clickedConfim, setClickedConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
   const [successBooking, setSuccessBooking] = useState(false);
 
   const isStepActive = (stepName: StepName) => activeStep === stepName;
@@ -124,6 +123,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       return;
     }
     if (clickedConfim) {
+      setSuccessBooking(false);
       (async () => {
         const response = await fetch("/api/booking", {
           method: "POST",
@@ -134,12 +134,12 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           }),
         });
         const data = await response.json();
+        console.log(data);
         if (data.error) {
           setErrorMsg(data.error);
           return;
         }
         if (data.success) {
-          setSuccessMsg(data.success);
           setSuccessBooking(true);
         }
       })();
@@ -149,89 +149,100 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
   useEffect(() => {
     if (successBooking) {
-      setTimeout(() => {
-        setSuccessBooking(false);
-      }, 5000);
       setActiveStep("date");
     }
   }, [successBooking]);
-  
+
   return (
-    <div className="h-fit py-3 px-2 border border-skyline-border bg-ghost-white rounded-lg">
-      <ProgressBarBooking activeStep={activeStep} />
-      <div>
-        <div className="flex justify-between items-center">
-          <Button onClick={previousStep} variant="outline" size="icon">
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <h3 className="font-semibold">
-              {steps.find((step) => step.name === activeStep)?.title}
-            </h3>
+    <>
+      {successBooking && (
+        <div className="flex flex-col justify-between items-center p-3 border border-sage-green rounded-l bg-green-100 my-3 rounded-lg">
+          <div className="flex w-full justify-center items-center">
+            <p className="text-sage-green">
+              Votre réservation a été effectuée avec succès
+            </p>
           </div>
-          <Button onClick={nextStep} variant="outline" size="icon">
-            <ChevronRight className="h-4 w-4" />
+          <Button
+            onClick={() => {
+              setSuccessBooking(false);
+            }}
+            variant="default"
+            size="lg"
+            className="w-full justify-center items-center"
+          >
+            Fermer
           </Button>
         </div>
-      </div>
-      <div>
-        {isStepActive("date") && (
-          <Calendar daysClosed={daysClosed} setSelectedDay={setSelectedDay} />
-        )}
-        {isStepActive("time") && (
-          <BookingHours
-            setSelectedHours={setSelectedHours}
-            opperatingHours={opperatingHours}
-            selectedDay={selectedDay}
-            orderOfDay={orderOfDay}
-            setOrderOfDay={setOrderOfDay}
-            restaurantSeats={restaurantSeats}
-            setRestaurantSeats={setRestaurantSeats}
-            restaurant={restaurant}
-          />
-        )}
-        {isStepActive("seats") && (
-          <BookingSeat
-            setSelectedSeat={setSelectedSeat}
-            restaurantSeats={restaurantSeats}
-            restaurant={restaurant}
-          />
-        )}
-        {isStepActive("confirm") && (
-          <>
-            {successBooking && (
-              <div className="flex w-full justify-center items-center p-3 border border-sage-green rounded-l">
-                <p className="text-sage-green">
-                  Votre réservation a été effectuée avec succès
-                </p>
-              </div>
-            )}
-            <div className="flex flex-col space-y-3 pt-6">
-              <h1 className="flex justify-center">Confirmation</h1>
-              <p>
-                Date:{" "}
-                {format(selectedDay ?? new Date(), "EEEE d MMMM yyyy", {
-                  locale: fr,
-                })}
-              </p>
-              <p>Heure: {selectedHours}</p>
-              <p>Nombre de personnes: {selectedSeat}</p>
-              {errorMsg && <p className="text-pomegranate">{errorMsg}</p>}
-              {data ? (
-                <Button onClick={() => setClickedConfirm(true)}>
-                  Confirmer
-                </Button>
-              ) : (
-                <Button variant={"outline"}>
-                  <Link href="/login">
-                    Connectez-vous pour confirmer votre réservation
-                  </Link>
-                </Button>
-              )}
+      )}
+      <div className="h-fit py-3 px-2 border border-skyline-border bg-[#F5F5F5] rounded-lg">
+        <ProgressBarBooking activeStep={activeStep} />
+        <div>
+          <div className="flex justify-between items-center">
+            <Button onClick={previousStep} variant="outline" size="icon">
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div>
+              <h3 className="font-semibold">
+                {steps.find((step) => step.name === activeStep)?.title}
+              </h3>
             </div>
-          </>
-        )}
+            <Button onClick={nextStep} disabled variant="outline" size="icon">
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        <div>
+          {isStepActive("date") && (
+            <Calendar daysClosed={daysClosed} setSelectedDay={setSelectedDay} />
+          )}
+          {isStepActive("time") && (
+            <BookingHours
+              setSelectedHours={setSelectedHours}
+              opperatingHours={opperatingHours}
+              selectedDay={selectedDay}
+              orderOfDay={orderOfDay}
+              setOrderOfDay={setOrderOfDay}
+              restaurantSeats={restaurantSeats}
+              setRestaurantSeats={setRestaurantSeats}
+              restaurant={restaurant}
+            />
+          )}
+          {isStepActive("seats") && (
+            <BookingSeat
+              setSelectedSeat={setSelectedSeat}
+              restaurantSeats={restaurantSeats}
+              restaurant={restaurant}
+            />
+          )}
+          {isStepActive("confirm") && (
+            <>
+              <div className="flex flex-col space-y-3 pt-6">
+                <h1 className="flex justify-center">Confirmation</h1>
+                <p>
+                  Date:{" "}
+                  {format(selectedDay ?? new Date(), "EEEE d MMMM yyyy", {
+                    locale: fr,
+                  })}
+                </p>
+                <p>Heure: {selectedHours}</p>
+                <p>Nombre de personnes: {selectedSeat}</p>
+                {errorMsg && <p className="text-pomegranate">{errorMsg}</p>}
+                {data ? (
+                  <Button onClick={() => setClickedConfirm(true)}>
+                    Confirmer
+                  </Button>
+                ) : (
+                  <Button variant={"outline"}>
+                    <Link href="/login">
+                      Connectez-vous pour confirmer votre réservation
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

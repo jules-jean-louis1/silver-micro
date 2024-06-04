@@ -4,35 +4,36 @@ import { LogIn } from "lucide-react";
 import { useState } from "react";
 
 type RegisterFormProps = {
-    setSuccessRegister: (value: boolean) => void;
-  };
+  setSuccessRegister: (value: boolean) => void;
+};
 
-export const RegisterForm = ({ setSuccessRegister}: RegisterFormProps) => {
-
+export const RegisterForm = ({ setSuccessRegister }: RegisterFormProps) => {
+  const [error, setError] = useState<string | null>(null);
 
   const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: e.currentTarget.email.value,
-                firstname: e.currentTarget.firstname.value,
-                lastname: e.currentTarget.lastname.value,
-                password: e.currentTarget.password.value,
-                passwordConfirm: e.currentTarget.passwordConfirm.value,
-            }),
-            });
-            const data = await response.json();
-            console.log(data);
-            if (response.ok) {
-                setSuccessRegister(true);
-            } else {
-                console.error(data.error);
-            }
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: e.currentTarget.email.value,
+          firstname: e.currentTarget.firstname.value,
+          lastname: e.currentTarget.lastname.value,
+          password: e.currentTarget.password.value,
+          passwordConfirm: e.currentTarget.passwordConfirm.value,
+        }),
+      });
+      const data = await response.json();
+      if (data.error) {
+        setError(data.error);
+        return;
+      }
+      if (data.success) {
+        setSuccessRegister(true);
+      } 
     } catch (error) {
       console.error("Sign in failed", error);
     }
@@ -72,6 +73,9 @@ export const RegisterForm = ({ setSuccessRegister}: RegisterFormProps) => {
             type="password"
             label="Confirmer le mot de passe"
           />
+          <div className="h-16">
+            <p className="text-red-400">{error}</p>
+          </div>
           <Button type="submit" className="w-full flex space-x-3 items-center">
             S'inscrire
             <LogIn />

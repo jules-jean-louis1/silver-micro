@@ -11,8 +11,10 @@ import {
 import { City } from "../../../../types/databaseTable";
 import Link from "next/link";
 import { Salad } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export const Autocomplete: React.FC = () => {
+  const pathnames = usePathname();
   const [cities, setCities] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -37,26 +39,27 @@ export const Autocomplete: React.FC = () => {
 
   useEffect(() => {
     if (search === "") return;
-    console.log(selectedCity);
-    console.log(search);
     (async () => {
       const resp = await fetch(
         `/api/restaurant/search?city=${selectedCity}&restaurant_name=${search}`
       );
       const data = await resp.json();
-      console.log(data);
       if (data.length > 0) {
         setResultSearch(data);
       }
     })();
   }, [search]);
 
+  useEffect(() => {
+    setResultSearch([]);
+  }, [pathnames]);
+
   return (
     <>
-      <div className="rounded-lg bg-whisper-white border border-skyline-border px-0.5">
+      <div className="rounded-lg bg-whisper-white border border-skyline-border px-0.5 w-fit">
         <div className="flex items-center">
           <Select onValueChange={(e) => handleCity(e)}>
-            <SelectTrigger className="w-[230px] bg-whisper-white">
+            <SelectTrigger className="w-[230px] bg-whisper-white focus:outline-none">
               <SelectValue placeholder="Ville" />
             </SelectTrigger>
             <SelectContent>
@@ -74,16 +77,22 @@ export const Autocomplete: React.FC = () => {
               <Input
                 placeholder="Rechercher un restaurant"
                 onChange={(e) => handleSearch(e)}
-                className="bg-whisper-white border-transparent"
+                className="bg-whisper-white border-transparent focus:outline-none w-full"
               />
-              <Button size="sm" className="bg-sunshine-yellow text-midnight-black font-semibold">
+              <Button
+                size="sm"
+                className="bg-sunshine-yellow text-midnight-black font-semibold"
+              >
                 Rechercher
               </Button>
             </div>
             {resultSearch.length > 0 && search.length > 0 && (
-              <div className="absolute w-full bg-flora-white rounded-b-lg shadow-lg">
+              <div className="absolute w-full bg-white rounded-b-lg shadow-lg">
                 <div className="bg-ecalyptus-green rounded-lg p-2">
-                  <Link href={"/restaurants"} className="flex ,items-center space-x-3">
+                  <Link
+                    href={"/restaurants"}
+                    className="flex items-center space-x-3"
+                  >
                     <Salad />
                     <h4>Retrouvez tous les restaurants</h4>
                   </Link>

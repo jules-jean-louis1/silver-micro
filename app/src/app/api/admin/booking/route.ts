@@ -12,6 +12,7 @@ export async function GET(req: any, params: any) {
   if (userId.length === 0) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
   }
+
   try {
     const result = await sequelize.transaction(async (t: any) => {
       const user = await CustomerRole.findAll({

@@ -54,7 +54,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         "sunshine-yellow": "#FFCD00",
-        "sunshine-yellow-light": "hsl(48,100,50,30%)",
+        "sunshine-yellow-light": "hsla(48, 100%, 50%, 0.3)",
         "ghost-white": "#F2F2F2",
         "whisper-white": "#EBEBEB",
         "midnight-black": "#191919",

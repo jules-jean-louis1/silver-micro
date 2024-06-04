@@ -20,35 +20,35 @@ export async function POST(request: any) {
       body.password.length === 0 ||
       body.passwordConfirm.length === 0
     ) {
-      return NextResponse.json({ error: "Missing Fields" }, { status: 400 });
+      return NextResponse.json({ error: "Veuillez remplir tous les champs." }, { status: 400 });
     }
     if (body.firstname.length < 2 || body.firstname.length > 55) {
       return NextResponse.json(
-        { error: "Firstname must be between 2 and 55 characters" },
+        { error: "Prénom doit être entre 2 et 55 caractères" },
         { status: 400 }
       );
     }
     if (body.lastname.length < 2 || body.lastname.length > 55) {
       return NextResponse.json(
-        { error: "Lastname must be between 2 and 55 characters" },
+        { error: "Nom doit être entre 2 et 55 caractères" },
         { status: 400 }
       );
     }
     if (!validateEmail(body.email)) {
-      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+      return NextResponse.json({ error: "Email invalide"}, { status: 400 });
     }
     if (!validatePassword(body.password)) {
       return NextResponse.json(
         {
           error:
-            "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character",
+            "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial",
         },
         { status: 400 }
       );
     }
     if (body.password !== body.passwordConfirm) {
       return NextResponse.json(
-        { error: "Passwords do not match" },
+        { error: "Les mots de passe ne correspondent pas" },
         { status: 400 }
       );
     }
@@ -57,7 +57,7 @@ export async function POST(request: any) {
     });
     if (customerExists) {
       return NextResponse.json(
-        { error: "Email already exists" },
+        { error: "Un compte avec cet email existe déjà" },
         { status: 400 }
       );
     }
@@ -79,7 +79,7 @@ export async function POST(request: any) {
         { status: 500 }
       );
     } else {
-      return NextResponse.json({ message: "Customer created successfully" }, { status: 201 });
+      return NextResponse.json({ success: "Customer created successfully" }, { status: 201 });
     }
 
   } catch (error) {
