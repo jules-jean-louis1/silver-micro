@@ -7,7 +7,7 @@ import { fr, se } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { formatDateWithoutUTCConversion } from "@/app/utils/Booking";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleX } from "lucide-react";
 import { ProgressBarBooking } from "./ProgressBarBooking";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -156,10 +156,22 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   return (
     <>
       {successBooking && (
-        <div className="flex w-full justify-center items-center p-3 border border-sage-green rounded-l bg-green-100 pb-3">
-          <p className="text-sage-green">
-            Votre réservation a été effectuée avec succès
-          </p>
+        <div className="flex flex-col justify-between items-center p-3 border border-sage-green rounded-l bg-green-100 my-3 rounded-lg">
+          <div className="flex w-full justify-center items-center">
+            <p className="text-sage-green">
+              Votre réservation a été effectuée avec succès
+            </p>
+          </div>
+          <Button
+            onClick={() => {
+              setSuccessBooking(false);
+            }}
+            variant="default"
+            size="lg"
+            className="w-full justify-center items-center"
+          >
+            Fermer
+          </Button>
         </div>
       )}
       <div className="h-fit py-3 px-2 border border-skyline-border bg-[#F5F5F5] rounded-lg">
