@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -45,7 +45,7 @@ type User = {
   customer_role_restaurants: CustomerRoleRestaurant[];
 };
 
-export const AdminUserList = () => {
+export const AdminUserList:FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [clickedDelete, setClickedDelete] = useState<any>({
     state: false,
@@ -180,3 +180,5 @@ export const AdminUserList = () => {
     </div>
   );
 };
+
+

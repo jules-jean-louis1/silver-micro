@@ -6,7 +6,7 @@ import { useSessionContext } from "@/app/utils/useSessionContext";
 import { Button } from "@/components/ui/button";
 import { NotebookPen, SquareMenu, UserRound } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 function AdminPage() {

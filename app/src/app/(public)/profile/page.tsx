@@ -11,10 +11,20 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 
 function ProfilePage() {
   const { data } = useSession();
   const [bookings, setBookings] = useState<any>([]);
+  const [favorites, setFavorites] = useState<any>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const section = searchParams.get("section");
+
+  const handleSection = (section: string) => {
+    router.replace(`/profile?section=${section}`);
+  };
 
   if (!data) {
     return (
@@ -38,41 +48,88 @@ function ProfilePage() {
     })();
   }, [data]);
 
+  useEffect(() => {
+    if (!data.user) return;
+    (async () => {
+      const resp_favorite = await fetch(`/api/favorites/${data.user.id}`);
+      const data_favorite = await resp_favorite.json();
+      if (data_favorite.error) {
+        console.error(data_favorite.error);
+        return;
+      }
+      setFavorites(data_favorite);
+    })();
+  }, [data]);
+
   return (
-    <section>
-      <article></article>
+    <section className="flex justify-center px-12 space-x-5">
+      <article className="flex flex-col">
+        {data.user && (
+          <p>
+            Welcome, {data.user.firstname} {data.user.lastname}
+          </p>  
+        )}
+        <Button onClick={() => handleSection("booking")}>Réservations</Button>
+        <Button onClick={() => handleSection("favorites")}>Favoris</Button>
+      </article>
       <article>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Restaurant</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Heure</TableHead>
-              <TableHead>Nombre de personnes</TableHead>
-              <TableHead>Statut</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookings.length > 0 &&
-              bookings.map((booking: any) => (
+        {!section && (
+          <div>
+            <h4>Bienvenue sur votre profil</h4>
+          </div>
+        )}
+        {section === "booking" && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Restaurant</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Heure</TableHead>
+                <TableHead>Nombre de personnes</TableHead>
+                <TableHead>Statut</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {bookings.length > 0 &&
+                bookings.map((booking: any) => (
+                  <TableRow>
+                    <TableCell>{booking.restaurant.name}</TableCell>
+                    <TableCell>
+                      {format(booking.date, "EEEE d MMMM yyyy", {
+                        locale: fr,
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      {format(booking.date, "hh-mm", {
+                        locale: fr,
+                      })}
+                    </TableCell>
+                    <TableCell>{booking.seat}</TableCell>
+                    <TableCell>{booking.status}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        )}
+        {section === "favorites" &&
+          (favorites.length > 0 ? (
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell>{booking.restaurant.name}</TableCell>
-                  <TableCell>
-                    {format(booking.date, "EEEE d MMMM yyyy", {
-                      locale: fr,
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    {format(booking.date, "hh-mm", {
-                      locale: fr,
-                    })}
-                  </TableCell>
-                  <TableCell>{booking.seat}</TableCell>
-                  <TableCell>{booking.status}</TableCell>
+                  <TableHead>Restaurant</TableHead>
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody>
+                {favorites.map((favorite: any) => (
+                  <TableRow key={favorite.id}>
+                    <TableCell>{favorite.restaurant.name}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <p>Vous n'avez pas de favoris.</p>
+          ))}
       </article>
     </section>
   );
