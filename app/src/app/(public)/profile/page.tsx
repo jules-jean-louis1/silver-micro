@@ -18,6 +18,8 @@ function ProfilePage() {
   const { data } = useSession();
   const [bookings, setBookings] = useState<any>([]);
   const [favorites, setFavorites] = useState<any>([]);
+  const [deleteBooking, setDeleteBooking] = useState<any>([]);
+  const [successDelete, setSuccesDelete] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const section = searchParams.get("section");
@@ -45,8 +47,9 @@ function ProfilePage() {
         return;
       }
       setBookings(data_booking);
+      setSuccesDelete(false);
     })();
-  }, [data]);
+  }, [data, successDelete]);
 
   useEffect(() => {
     if (!data.user) return;
@@ -61,13 +64,33 @@ function ProfilePage() {
     })();
   }, [data]);
 
+  useEffect(() => {
+    if (deleteBooking.length === 0) return;
+    (async () => {
+      const book = await fetch(
+        "/api/booking/" + data.user.id + "/" + deleteBooking.id,
+        {
+          method: "DELETE",
+        }
+      );
+      const data_book = await book.json();
+      if (data_book.error) {
+        console.log(data_book.error);
+      }
+      if (data_book.success) {
+        setDeleteBooking([]);
+        setSuccesDelete(true);
+      }
+    })();
+  }, [deleteBooking]);
+
   return (
     <section className="flex justify-center px-12 space-x-5">
       <article className="flex flex-col">
         {data.user && (
           <p>
             Welcome, {data.user.firstname} {data.user.lastname}
-          </p>  
+          </p>
         )}
         <Button onClick={() => handleSection("booking")}>Réservations</Button>
         <Button onClick={() => handleSection("favorites")}>Favoris</Button>
@@ -87,6 +110,7 @@ function ProfilePage() {
                 <TableHead>Heure</TableHead>
                 <TableHead>Nombre de personnes</TableHead>
                 <TableHead>Statut</TableHead>
+                <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -106,6 +130,14 @@ function ProfilePage() {
                     </TableCell>
                     <TableCell>{booking.seat}</TableCell>
                     <TableCell>{booking.status}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="destructive"
+                        onClick={() => setDeleteBooking(booking)}
+                      >
+                        Supprimer
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

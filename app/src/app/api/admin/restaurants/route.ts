@@ -95,7 +95,7 @@ export async function PUT(req: any) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const body = await req.json();
-
+  console.log(body)
   if (
     !body.restaurant_id ||
     !body.name ||

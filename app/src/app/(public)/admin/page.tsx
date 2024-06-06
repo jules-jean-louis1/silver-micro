@@ -21,12 +21,6 @@ function AdminPage() {
     router.replace(`/admin?section=${section}`);
   };
 
-  useEffect(() => {
-    if (section === "") {
-      handleSection("restaurant");
-    }
-  }, []);
-
   return isAuthorized ? (
     <>
       <section className="flex space-x-3 lg:px-16">
@@ -68,7 +62,7 @@ function AdminPage() {
           </div>
         </article>
         <article className="w-full">
-          {section === "restaurant" && <AdminRestaurantList />}
+          {section === "restaurant" || !section && <AdminRestaurantList />}
           {section === "booking" && <AdminBookingList />}
           {section === "users" && <AdminUserList />}
         </article>

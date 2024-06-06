@@ -75,6 +75,7 @@ export const canManageInAdmin = (session : AppSession) => {
   if (!session || !session.roles) {
     return false;
   }
+  console.log(session)
   return session.roles.some(
     (role) =>
       role.role === USER_ROLE.SUPER_ADMIN ||
